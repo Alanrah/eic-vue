@@ -84,7 +84,7 @@ export default {
       this.$Message.success('已保持了图片的:dataURL')
     },
     stopPhoto () {
-      this.track.stop()
+      //this.track.stop()
     }
   },
   destroyed () {

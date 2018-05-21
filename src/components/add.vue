@@ -5,6 +5,8 @@
 		</div>
 
 		<!----><camerax></camerax>
+		<photo></photo>
+
 
 	</div>
 </template>
@@ -14,6 +16,7 @@
 	import Bus from '../bus.js'
 	import collect from './collect.vue'
 	import camerax from './camera.vue'
+	import photo from './photo.vue'
 
 	export default{
 		
@@ -25,7 +28,8 @@
 		},
 		components:{
 			collect,
-			camerax
+			camerax,
+			photo
 		}
 	}
 </script>

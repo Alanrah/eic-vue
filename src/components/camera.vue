@@ -18,8 +18,8 @@
 	    <br>
 	    <div class="add-preview" v-show="isPreview" @click="closePreview">
 	      <img :src="previewImg">
-	      <br>
 	    </div>
+      <br>
 	    <button type="button" class="upload-button">识别该设备</button> 
 	  </div>
 
@@ -91,6 +91,7 @@
 <style>
 	.upload-button{
 		display: block;
+    margin-top: 10px;
 	}
 	.camera-photo{
 		text-align:center;
