@@ -15,9 +15,6 @@
           </a>
           <span class="list-img-close" @click='delImage(index)'></span>
         </li>
-        <li class="list-li">
-          <span class="add-img" @click.stop="addPic"> </span>
-        </li>
       </ul>
     </div>
     <div class="add-preview" v-show="isPreview" @click="closePreview">
@@ -118,7 +115,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
   /* ul li以横排显示 */
 
   /* 所有class为menu的div中的ul样式 */

@@ -1,6 +1,6 @@
 <template>
-  <div :class="[full==true?'btn-full':'btn-normal']">
-    <div class="text"> {{text}}</div>
+  <div>
+    <button></button>
   </div>
 </template>
 <script>
