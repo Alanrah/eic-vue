@@ -10,7 +10,7 @@
 </template>  
   
 <script>  
-import Exif from '../../node_modules/exif-js-master/exif.js'  
+import Exif from '../../static/exif-js-master/exif.js'  
 export default {  
   data () {  
     return {  

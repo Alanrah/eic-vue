@@ -3,20 +3,20 @@
 		<div class="modifyEquip" v-on:click="jump">
 			修改个人机房设备信息
 		</div>
-
-		<!----><camerax></camerax>
-		<photo></photo>
-
-
+		<!--<pluscamera></pluscamera>-->
+		<device></device>
+		<position></position>
+		<inserttodb></inserttodb>
 	</div>
 </template>
 <script>
 
 //上传图片到服务器
 	import Bus from '../bus.js'
-	import collect from './collect.vue'
-	import camerax from './camera.vue'
-	import photo from './photo.vue'
+	import device from './device.vue'
+	import position from './position.vue'
+	import inserttodb from './insert_to_db.vue'
+	//import pluscamera from './pluscamera.vue'
 
 	export default{
 		
@@ -27,9 +27,11 @@
 			},
 		},
 		components:{
-			collect,
-			camerax,
-			photo
+			device,
+			position,
+			inserttodb
+
+			//pluscamera,
 		}
 	}
 </script>
@@ -44,6 +46,7 @@
 	}
 	
 	.modifyEquip{
+		display: none;
 		height: 68px;
 		width: 740px;
 		line-height: 80px;
