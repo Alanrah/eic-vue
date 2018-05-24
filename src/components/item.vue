@@ -9,15 +9,20 @@
           <div class="sheet-content-image">
               <img class="image" :src="i.d_pic">
           </div>
-          <div class="sheet-content-middle">
+          <div class="sheet-content-middle" @click="previewImage(i)">
               {{i.d_name}}
           </div>
-          <div class="sheet-content-image">
+          <div class="sheet-content-image" @click="edit">
               <img class="imageicon" :src="editicon">
           </div>
-          <div class="sheet-content-image">
+          <div class="sheet-content-image" @click="delet">
               <img class="imageicon" :src="delicon">
           </div>
+      </div>
+
+      <div class="preview" v-show="isPreview" @click="closePreview"> 
+        <p>{{previewName}}：详情待补充</p>
+        <img class="previewImg" :src="previewImg">
       </div>
   </div>
 </template>
@@ -36,6 +41,10 @@ export default {
       data_item:{},
       editicon:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525925336206&di=0639d0503540384d2ca6ca92d1a90e3b&imgtype=0&src=http%3A%2F%2Fpic.qiantucdn.com%2F58pic%2F14%2F99%2F24%2F86m58PICvDW_1024.jpg",
       delicon:"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=225219922,1963963014&fm=27&gp=0.jpg",
+      isPreview: false,
+
+      previewImg:"",
+      previewName:"",
   }
   },
   methods:{
@@ -46,7 +55,21 @@ export default {
           this.$refs.toggleicon.style.transform = !this.showSheets ? 'rotate(90deg)' : 'rotate(0)'
           this.showSheets = !this.showSheets
       },
+      previewImage: function (i) {
+        let vm = this;
+        vm.isPreview = true;
+        vm.previewImg = i.d_pic;
+        vm.previewName = i.d_name;
       },
+      closePreview: function () {
+        let vm = this;
+        vm.isPreview = false;
+        vm.previewImg = "";
+        vm.previewName = ""
+      },
+      edit:function(){alert("功能正在完善")},
+      delet:function(){alert("功能正在完善")},
+    },
       created(){
         this.data_item = this.item;
       },
@@ -109,5 +132,21 @@ export default {
     margin-top:5px;
     flex-direction: row;
     justify-content: center;
+}
+.preview{
+  width: 350px;
+  height: 300px;
+  top: 300px;
+  left: 200px;
+  position: fixed;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #e5e5e5;
+  background-color: #F7F7F7;
+  z-index: 99;
+}
+.previewImg{
+  width: 100%;
+  height: 40%;
 }
 </style>

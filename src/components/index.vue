@@ -9,7 +9,7 @@
 				<Item v-for="(item,index) in lists" :item="item" :key="index"></Item>
 		</div>
 
-		<div class="addroom">
+		<div class="addroom" @click="roomInsert">
 			添加新机房
 		</div>
 
@@ -57,7 +57,7 @@
 					{
 						r_id:"机房2",
 						r_name:"B",
-						num:3,
+						num:5,
 						devices:[{
 							d_id:1,
 		          d_name:'路由器',
@@ -73,7 +73,17 @@
 		          d_name:'路由器',
 		          last_modified:"2018/05/08/15:51:00.17",
 		          d_pic:'http://pic.qiantucdn.com/58pic/15/68/75/98k58PICp5W_1024.jpg'
-        		},]
+        		},{
+							d_id:4,
+		          d_name:'机柜1',
+		          last_modified:"2018/05/08/15:51:00.17",
+		          d_pic:'http://www.qianqigroup.com/Upload/product/max/SeverCabinet/19Inch19USeverCabinet11-18462028953.jpg'
+       			},{
+							d_id:5,
+		          d_name:'机柜2',
+		          last_modified:"2018/05/08/15:51:00.17",
+		          d_pic:'http://bmp.skxox.com/201606/23/xiaowai.153607.jpg'
+       			},]
 					},
 
 				],
@@ -112,6 +122,7 @@
       this.txtInput = event.value;
       console.log('oninput', event.value);
     },
+    roomInsert:function(){alert("功能正在完善")}
 	}
 }
 </script>

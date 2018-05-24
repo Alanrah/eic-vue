@@ -2,14 +2,30 @@
 	<div style="margin-top: 10px;">
 		<div class="insert" v-show="showInsert">
 			<p>识别结果如下：</p>
+
 			<div v-show="showDeviceName" class="line">
 				<p>该设备类型：<input class="input" v-model="deviceName"></p>
 			</div>
+
 			<div v-show="showPosition" class="line">
-				<p>该设备位置：<input class="input" v-model="positionNum"></p>
-				<p>U</p>
-			</div> 	
-			<button  v-show="showSubmit" @click="submit">确认添加设备到机房数据库</button>
+				<p>该设备位置：<input class="input" v-model="positionNum">U</p>	
+			</div> 
+
+			<div v-show="showSubmit" class="line">
+				<select v-model="selectRoom">
+			    <option disabled value="">选择机房</option>
+			    <option>机房A</option>
+			    <option>机房B</option>
+			  </select>	
+
+			  <select v-model="selectCabinet">
+			    <option disabled value="">选择机柜</option>
+			    <option>机柜1</option>
+			    <option>机柜2</option>
+			  </select>	
+
+			<button  @click="submitInsert">确认添加设备到机房数据库</button>
+		</div>
 		</div>
 	</div>
 </template>
@@ -22,6 +38,8 @@
 				deviceFile:null,
 				positionNum:-1,
 				positionFile:null,
+				selectRoom:'',
+				selectCabinet:'',
 			}
 		},
 		computed:{
@@ -55,11 +73,12 @@
 	    });
   } ,
   methods:{
-  	submit(){
+  	submitInsert(){
   		if(this._data.positionNum==-1)
   			alert("缺少设备位置信息")
   		if(this._data.deviceName =='' || this._data.deviceName =='识别出错')
   			alert("缺少设备类型信息")
+  		else{alert("功能正在完善")}
 
   	}
   }
@@ -72,9 +91,9 @@
 		align-items: flex-start;
 	}
 	.line{
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
+		height: 50px;
+		float: left;
+		margin-top: 0px;
 	}
 	.input{
 		height: 30px;

@@ -130,7 +130,7 @@
 		flex-direction: column;
     align-items: center;
 		padding: 8px;
-    margin-top:80px;
+    margin-top:10px;
     position: relative;
     text-align: center;
     margin-left: auto;
