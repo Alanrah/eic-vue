@@ -25,7 +25,6 @@
 </template>
 
 <script>  
-  import axios from 'axios'
   import Bus from '../bus.js'
 	export default {  
 		data(){
@@ -56,7 +55,7 @@
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         }
        // 添加请求头
-        axios.post('http://10.108.104.139:5000/device', param, config)
+        this.$axios.post('http://10.108.107.106:5000/device', param, config)
             .then(response => {
               self.deviceName = response.data;
               self.showDeviceName = true;
@@ -65,9 +64,7 @@
               Bus.$emit('device', d);
             })
             .catch(function (error) {
-               self.deviceName = "识别出错";
-               let d = {"file":file,"deviceName":self.deviceName}
-               Bus.$emit('device', d);
+               alert(error)
              })
     },
 			toggleAddPic: function () {

@@ -3,10 +3,12 @@
 		<div class="modifyEquip" v-on:click="jump">
 			修改个人机房设备信息
 		</div>
-		<!--<pluscamera></pluscamera>-->
+		
 		<device></device>
 		<position></position>
 		<inserttodb></inserttodb>
+		<pluscamera></pluscamera>
+		<!---->
 	</div>
 </template>
 <script>
@@ -16,7 +18,7 @@
 	import device from './device.vue'
 	import position from './position.vue'
 	import inserttodb from './insert_to_db.vue'
-	//import pluscamera from './pluscamera.vue'
+	import pluscamera from './pluscamera.vue'
 
 	export default{
 		
@@ -29,9 +31,9 @@
 		components:{
 			device,
 			position,
-			inserttodb
+			inserttodb,
 
-			//pluscamera,
+			pluscamera,
 		}
 	}
 </script>

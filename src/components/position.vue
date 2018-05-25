@@ -24,7 +24,6 @@
 </template>
 
 <script>  
-  import axios from 'axios'
   import Bus from '../bus.js'
 	export default {  
 		data(){
@@ -55,7 +54,7 @@
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         }
        // 添加请求头
-        axios.post('http://10.108.104.139:5000/position', param, config)
+        this.$axios.post('http://10.108.107.106:5000/position', param, config)
             .then(response => {
               self.positionNum = response.data;
               self.showPosition = true;
@@ -63,9 +62,7 @@
               Bus.$emit('position', d);
             })
             .catch(function (error) {
-               self.positionNum = "识别出错";
-               let d = {"file":file,"positionNum":self.positionNum}
-              Bus.$emit('position', d);
+              alert(error)
              })
     },
 			toggleAddPic: function () {
