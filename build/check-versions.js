@@ -45,7 +45,7 @@ module.exports = function () {
 
     for (let i = 0; i < warnings.length; i++) {
       const warning = warnings[i]
-      console.log('  ' + warning)
+      //console.log('  ' + warning)
     }
 
     console.log()

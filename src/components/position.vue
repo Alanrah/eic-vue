@@ -44,7 +44,7 @@
 		methods:{
       upload(){
         var self = this
-        var file = this.$refs.uploadImage.files[0]
+        var file = this.uploadFile
         /* eslint-disable no-undef */
         let param = new FormData()  // 创建form对象
         param.append('file', file, file.name)  // 通过append向form对象添加数据
@@ -54,7 +54,7 @@
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         }
        // 添加请求头
-        this.$axios.post('http://10.108.107.106:5000/position', param, config)
+        this.$axios.post('http://10.108.104.228:5000/position', param, config)
             .then(response => {
               self.positionNum = response.data;
               self.showPosition = true;

@@ -6,8 +6,7 @@
         <br>
         <span>请选择设备图片上传</span>
         <input type="file" ref="uploadImage" @change="onFileChange" accept="image/*" capture="camera" style="display: none;">
-      </div>
-
+    </div>
     <div class="list-li" v-show="show">
 	    <div style="display: inline-block;">
 	    	<a class="list-link" @click='previewImage(imgsrc)'>
@@ -44,7 +43,7 @@
 		methods:{
       upload(){
         var self = this
-        var file = this.$refs.uploadImage.files[0]
+        var file = this.uploadFile
         /* eslint-disable no-undef */
         let param = new FormData()  // 创建form对象
         param.append('file', file, file.name)  // 通过append向form对象添加数据
@@ -55,7 +54,7 @@
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         }
        // 添加请求头
-        this.$axios.post('http://10.108.107.106:5000/device', param, config)
+        this.$axios.post('http://10.108.104.228:5000/device', param, config)
             .then(response => {
               self.deviceName = response.data;
               self.showDeviceName = true;
@@ -84,6 +83,7 @@
         let reader = new FileReader();
 		    reader.readAsDataURL(file);
 		    reader.onload = function(e){
+          
 	        self.imgsrc= e.target.result;
 	        self.show = true;
 		    }
@@ -115,6 +115,7 @@
 </script> 
 
 <style>
+  .choice{}
 	.upload-button{
 		display: block;
     margin-top: 10px;

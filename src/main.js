@@ -5,6 +5,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
+import Mint from 'mint-ui';
+import '../node_modules/mint-ui/lib/style.css';
+
+Vue.use(Mint);
+
+
 import axios from 'axios';
 
 //请求超时时限 我设置500毫秒

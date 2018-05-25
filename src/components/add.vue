@@ -32,7 +32,6 @@
 			device,
 			position,
 			inserttodb,
-
 			pluscamera,
 		}
 	}

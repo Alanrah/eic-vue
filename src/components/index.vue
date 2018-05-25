@@ -24,6 +24,7 @@
 			return{
 				txtInput: '',
         txtChange: '',
+        searchValue:"",
 				lists:[
 					{
 						r_id:"机房1",
@@ -151,7 +152,7 @@
 		display: flex;
 		width: 710px;
 		margin-left: 16px;
-		margin-top: 35px;
+		margin-top: 10px;
 		margin-bottom: 20px;
 		flex-direction: column;
 		align-items: center;
@@ -175,7 +176,7 @@
     height: 70px;
     width: 730px;
     margin-left: 10px;
-    margin-top: 2px;
+    margin-top: 10px;
     margin-bottom: 5px;
     border-width: 2px;
 		border-style: solid;
