@@ -1,7 +1,7 @@
 <template>
 	<div>
 
-		<div class="camera-photo" ref="divGenres" v-show="isPhoto" @click.stop="addPic">
+		<div class="camera-photo" ref="divGenres" v-show="isPhoto" @click="choiceImg">
         <img src="../assets/icon_photo.png" />
         <br>
         <span>请选择位置图片上传</span>
@@ -25,6 +25,7 @@
 
 <script>  
   import Bus from '../bus.js'
+  import qs from "qs"
 	export default {  
 		data(){
 			return{
@@ -36,6 +37,7 @@
         positionNum:-1,
         positionImg:null,
         showPosition:false,
+        uploadFile:null
 			}
 		},
 		watch: {
@@ -44,27 +46,42 @@
 		methods:{
       upload(){
         var self = this
-        var file = this.uploadFile
-        /* eslint-disable no-undef */
-        let param = new FormData()  // 创建form对象
-        param.append('file', file, file.name)  // 通过append向form对象添加数据
-        param.append('chunk', '0') // 添加form表单中其他数据
-        console.log(param.get('file')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
+        var wt = plus.nativeUI.showWaiting();
+        var img = new Image,
+            width = 512, //image resize   压缩后的宽
+            quality = 0.5, //image quality  压缩质量
+            canvas = document.createElement("canvas"),
+            drawer = canvas.getContext("2d");
+       img.src = self.imgsrc;
+       img.onload = function(){
+       canvas.width = width;
+       canvas.height = width * (img.height / img.width);
+        drawer.drawImage(img, 0, 0, canvas.width, canvas.height);
+        var base64 = canvas.toDataURL("image/*", quality); 
+        var pic = base64.split(',')[1];
+        var f=self.imgsrc;
+        var filename=f.replace(f.substring(0, f.lastIndexOf('/') + 1), '');
         let config = {
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        }
-       // 添加请求头
-        this.$axios.post('http://10.108.104.228:5000/position', param, config)
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          }
+
+        let para ={"fileString":pic,"filename":filename}
+
+        self.$axios.post('http://10.108.107.106:5000/position', qs.stringify(para), config)
             .then(response => {
               self.positionNum = response.data;
               self.showPosition = true;
-              let d = {"file":file,"positionNum":self.positionNum}
+              let d = {"file":pic,"positionNum":self.positionNum}
               Bus.$emit('position', d);
+              wt.close();
             })
             .catch(function (error) {
-              alert(error)
+                alert(error);
+                wt.close();
              })
+      }
     },
+
 			toggleAddPic: function () {
         let vm = this;
         if (vm.show === true) {
@@ -75,14 +92,19 @@
       },
 			onFileChange(e){
 				let self = this;
+
 				let files = e.target.files || e.dataTransfer.files;
         if (!files.length) return;
-        let file = files[0];
-        this.uploadFile = file;
-        let reader = new FileReader();
-		    reader.readAsDataURL(file);
+        let file = files[0];//File对象
+        self.uploadFile = file;
+
+        let reader = new FileReader();//FileReader对象
+
+		    reader.readAsDataURL(file);//该方法会读取指定的 Blob 或 File 对象。读取操作完成的时候，readyState 会变成已完成（DONE），并触发 loadend 事件，同时 result 属性将包含一个data:URL格式的字符串（base64编码）以表示所读取文件的内容。
+
 		    reader.onload = function(e){
-	        self.imgsrc= e.target.result;
+          let base64Code=this.result;
+	        self.imgsrc= e.target.result;//图片内容的base64编码
 	        self.show = true;
 		    }
 			},
@@ -108,6 +130,68 @@
         vm.isPreview = false;
         vm.previewImg = "";
       },
+      choiceImg(){
+        let self = this;
+        if (!window.plus){
+            self.addPic()
+            return;
+          }
+
+        let title = "选择照片"
+        let btns = ['拍照','相册']
+
+        var func = function(e){  
+          var index = e.index;  
+
+          if(index == 1) self.choiceCamera();  
+          if(index == 2) self.choicePic();  
+        }
+
+        if(title && btns && btns.length > 0){
+          var btnArray = [];
+          for(var i=0; i<btns.length; i++){
+            btnArray.push({title:btns[i]});
+          }
+          
+          plus.nativeUI.actionSheet({
+            title : title,
+            cancel : '取消',
+            buttons : btnArray
+          }, function(e){
+            if(func) func(e);
+          });
+        }
+      },
+      choiceCamera(){ 
+        let self = this;
+        //cmr.captureImage( successCB, errorCB, option );  
+        var cmr = plus.camera.getCamera();  
+        cmr.captureImage(function (path){  
+
+            plus.io.resolveLocalFileSystemURL(path, function(entry){
+                  self.imgsrc= entry.toLocalURL();
+                  self.show = true; 
+                  console.log("camera:"+entry.toLocalURL())
+ 
+            }, function(e){plus.nativeUI.toast("读取拍照文件错误：" + e.message);  });  
+        }, function(e){},{index:1,filename:"_doc/camera/"});  
+      } , 
+
+      choicePic(){  
+        let self = this;
+         plus.gallery.pick( function(p){  
+           plus.io.resolveLocalFileSystemURL(p, function(entry) { 
+                  self.imgsrc= entry.toLocalURL();
+                  self.show = true; 
+                  console.log("choice:"+entry.toLocalURL()) 
+          }, function(e) {  
+              plus.nativeUI.toast("读取拍照文件错误：" + e.message);  
+          });  
+           }, function ( e ) {  plus.nativeUI.toast("读取拍照文件错误：" + e.message);}, {  
+          filename: "_doc/camera/",  
+          filter:"image"  
+           } );  
+      },  
 	},
 }
 </script> 

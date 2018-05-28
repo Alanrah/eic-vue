@@ -46,11 +46,8 @@
 			},
 			choiceCamera(){ 
 				let self = this;
-				//cmr.captureImage( successCB, errorCB, option );  
 		    var cmr = plus.camera.getCamera();  
 		    cmr.captureImage(function (p){  
-		    	//plus.io.resolveLocalFileSystemURL( url, succesCB, errorCB );  
-		    	//通过IO组件，获取文件对象
 		        plus.io.resolveLocalFileSystemURL(p, function(entry){
 
 		        	entry.file( function(file){
@@ -78,12 +75,14 @@
 		  			}
 	    		self.setImg(path);},function(e){},{filter:'image'});  
 			}, 
+			setImg(src){  
+				alert("进入setimg");
+		    this.show=true;
+		    this.src=src;
+		} ,
+		
 	},
-	setImg(src){  
-		alert("进入setimg");
-    this.show=true;
-    this.src=src;
-}  
+	 
 }
 </script>
 <style>

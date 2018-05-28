@@ -1,12 +1,13 @@
 <template>
 	<div>
 
-		<div class="camera-photo" ref="divGenres" v-show="isPhoto" @click.stop="addPic">
+		<div class="camera-photo" ref="divGenres" v-show="isPhoto" @click="choiceImg">
         <img src="../assets/icon_photo.png" />
         <br>
         <span>请选择设备图片上传</span>
         <input type="file" ref="uploadImage" @change="onFileChange" accept="image/*" capture="camera" style="display: none;">
     </div>
+
     <div class="list-li" v-show="show">
 	    <div style="display: inline-block;">
 	    	<a class="list-link" @click='previewImage(imgsrc)'>
@@ -25,6 +26,7 @@
 
 <script>  
   import Bus from '../bus.js'
+  import qs from "qs"
 	export default {  
 		data(){
 			return{
@@ -35,6 +37,7 @@
         isPhoto: true,
         deviceName:"",
         showDeviceName:false,
+        uploadFile:null
 			}
 		},
 		watch: {
@@ -43,28 +46,40 @@
 		methods:{
       upload(){
         var self = this
-        var file = this.uploadFile
-        /* eslint-disable no-undef */
-        let param = new FormData()  // 创建form对象
-        param.append('file', file, file.name)  // 通过append向form对象添加数据
-        console.log(file)
-        param.append('chunk', '0') // 添加form表单中其他数据
-        console.log(param.get('file')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
+        var wt = plus.nativeUI.showWaiting();
+        var img = new Image,
+            width = 512, //image resize   压缩后的宽
+            quality = 0.5, //image quality  压缩质量
+            canvas = document.createElement("canvas"),
+            drawer = canvas.getContext("2d");
+       img.src = self.imgsrc;
+       img.onload = function(){
+       canvas.width = width;
+       canvas.height = width * (img.height / img.width);
+        drawer.drawImage(img, 0, 0, canvas.width, canvas.height);
+        var base64 = canvas.toDataURL("image/*", quality); 
+        var pic = base64.split(',')[1];
+        var f=self.imgsrc;
+        var filename=f.replace(f.substring(0, f.lastIndexOf('/') + 1), '');
         let config = {
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        }
-       // 添加请求头
-        this.$axios.post('http://10.108.104.228:5000/device', param, config)
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          }
+
+        let para ={"fileString":pic,"filename":filename}
+
+        self.$axios.post('http://10.108.107.106:5000/device', qs.stringify(para), config)
             .then(response => {
               self.deviceName = response.data;
               self.showDeviceName = true;
-              console.log(response.data)
-              let d = {"file":file,"deviceName":self.deviceName}
+              let d = {"file":pic,"deviceName":self.deviceName}
               Bus.$emit('device', d);
+              wt.close();
             })
             .catch(function (error) {
-               alert(error)
+                alert(error);
+                wt.close();
              })
+      }
     },
 			toggleAddPic: function () {
         let vm = this;
@@ -83,7 +98,7 @@
         let reader = new FileReader();
 		    reader.readAsDataURL(file);
 		    reader.onload = function(e){
-          
+
 	        self.imgsrc= e.target.result;
 	        self.show = true;
 		    }
@@ -110,6 +125,71 @@
         vm.isPreview = false;
         vm.previewImg = "";
       },
+
+      choiceImg(){
+        let self = this;
+        if (!window.plus){
+            self.addPic()
+            alert("不支持 plus");
+            return;
+          }
+
+        let title = "选择照片"
+        let btns = ['拍照','相册']
+
+        var func = function(e){  
+          var index = e.index;  
+
+          if(index == 1) self.choiceCamera();  
+          if(index == 2) self.choicePic();  
+        }
+
+        if(title && btns && btns.length > 0){
+          var btnArray = [];
+          for(var i=0; i<btns.length; i++){
+            btnArray.push({title:btns[i]});
+          }
+          
+          plus.nativeUI.actionSheet({
+            title : title,
+            cancel : '取消',
+            buttons : btnArray
+          }, function(e){
+            if(func) func(e);
+          });
+        }
+      },
+      choiceCamera(){ 
+        let self = this;
+        //cmr.captureImage( successCB, errorCB, option );  
+        var cmr = plus.camera.getCamera();  
+        cmr.captureImage(function (path){  
+
+            plus.io.resolveLocalFileSystemURL(path, function(entry){
+                  self.imgsrc= entry.toLocalURL();
+                  self.show = true; 
+                  console.log("camera:"+entry.toLocalURL())
+            }, function(e){plus.nativeUI.toast("读取拍照文件错误：" + e.message);  });  
+        }, function(e){},{index:1,filename:"_doc/camera/"});  
+      } , 
+
+      choicePic(){  
+        let self = this;
+         plus.gallery.pick( function(p){  
+           plus.io.resolveLocalFileSystemURL(p, function(entry) { 
+                  self.imgsrc= entry.toLocalURL();
+                  self.show = true; 
+                  console.log("choice:"+entry.toLocalURL()) 
+              
+          }, function(e) {  
+              plus.nativeUI.toast("读取拍照文件错误：" + e.message);  
+          });  
+           }, function ( e ) {  plus.nativeUI.toast("读取拍照文件错误：" + e.message);}, {  
+          filename: "_doc/camera/",  
+          filter:"image"  
+           } );  
+      },   
+
 	},
 }
 </script> 

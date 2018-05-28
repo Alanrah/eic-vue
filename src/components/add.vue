@@ -7,7 +7,6 @@
 		<device></device>
 		<position></position>
 		<inserttodb></inserttodb>
-		<pluscamera></pluscamera>
 		<!---->
 	</div>
 </template>
@@ -18,7 +17,6 @@
 	import device from './device.vue'
 	import position from './position.vue'
 	import inserttodb from './insert_to_db.vue'
-	import pluscamera from './pluscamera.vue'
 
 	export default{
 		
@@ -32,7 +30,6 @@
 			device,
 			position,
 			inserttodb,
-			pluscamera,
 		}
 	}
 </script>
