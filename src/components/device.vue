@@ -63,15 +63,18 @@
         var filename=f.replace(f.substring(0, f.lastIndexOf('/') + 1), '');
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            withCredentials: true,
           }
 
         let para ={"fileString":pic,"filename":filename}
 
         self.$axios.post('http://10.108.107.106:5000/device', qs.stringify(para), config)
-            .then(response => {
-              self.deviceName = response.data;
+            .then(response => {//返回图片存储地址和识别的结果
+              self.deviceName = response.data.split(',')[1];
               self.showDeviceName = true;
-              let d = {"file":pic,"deviceName":self.deviceName}
+              let picUrl = response.data.split(',')[0];
+              console.log(picUrl)
+              let d = {"file":picUrl,"deviceName":self.deviceName}
               Bus.$emit('device', d);
               wt.close();
             })

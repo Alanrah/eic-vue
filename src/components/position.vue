@@ -69,9 +69,10 @@
 
         self.$axios.post('http://10.108.107.106:5000/position', qs.stringify(para), config)
             .then(response => {
-              self.positionNum = response.data;
+              self.positionNum = response.data.split(',')[1];
               self.showPosition = true;
-              let d = {"file":pic,"positionNum":self.positionNum}
+              let picUrl = response.data.split(',')[0];
+              let d = {"file":picUrl,"positionNum":self.positionNum}
               Bus.$emit('position', d);
               wt.close();
             })

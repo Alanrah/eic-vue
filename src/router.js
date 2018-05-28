@@ -6,7 +6,7 @@ import Router from 'vue-router'
 import index from './components/index.vue'
 import add from './components/add.vue'
 import me from './components/me.vue'
-
+import login from './components/login.vue'
 
 //让vue使用vuerouter当做自己的路由
 //
@@ -14,6 +14,11 @@ Vue.use(Router)
 //创建一个路由对象并且输出
 export default new Router({
   routes: [
+  {
+      path: '/login',
+      name: 'login',
+      component: login
+    },
     {
       path: '/index',
       name: '机房信息',

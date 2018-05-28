@@ -76,4 +76,4 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
-router.push('index')
+router.push('login')

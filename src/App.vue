@@ -11,9 +11,11 @@
     </div>
  <!-- 路由出口 -->
   <!-- 路由匹配到的组件将渲染在这里 -->
+  <transition name="fade">
   <keep-alive>
     <router-view class="template"></router-view>
   </keep-alive>
+  </transition>
   </div>
 </template>
 
@@ -46,13 +48,13 @@
     height: 80px;
     position: fixed;
     bottom: 0px;
-    z-index: 98;
+    z-index: 10;
     background-color: #B5F0E6;
   }
   .template{
     height: 1100px;
     top: 0px;
-    bottom: 80px;
+
     left: 0px;
     right: 0px;
   }
