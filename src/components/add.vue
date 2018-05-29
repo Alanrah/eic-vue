@@ -23,7 +23,6 @@
 		methods:{
 			jump:function(){
 				this.$router.push('index');
-				Bus.$emit('jumptoindex', 'index');//添加一个 触发 #emit的事件按钮
 			},
 		},
 		components:{

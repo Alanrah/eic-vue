@@ -80,8 +80,8 @@
   export default{
     data:function(){
       return{
-        header:"今日机房",
-        selectpath:'index'
+        header:"",
+        selectpath:''
       }
     },
     methods:{
@@ -104,10 +104,6 @@
       }
     },
   mounted(){
-    Bus.$on('jumptoindex',(e)=>{
-      this._data.header = "今日机房";
-      this._data.selectpath=e;
-    })
   }
   }
 </script>

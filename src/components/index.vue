@@ -17,11 +17,13 @@
 </template>
 <script>
 	import Item from './item.vue'
+	import qs from "qs"
 	//import myTree  from './tree.vue'
 	const LOADMORE_COUNT = 4;
 	export default{
 		data(){//从服务器获取数据
 			return{
+				user:this.$USER,
 				txtInput: '',
         txtChange: '',
         searchValue:"",
@@ -94,6 +96,23 @@
 		components:{
 			Item,
 			
+		},
+		created(){
+				var self =this
+				let config = {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            //withCredentials: true,
+          }
+          console.log(this.$USER.user)
+        let para ={"user":this.$USER.user}
+        console.log(para)
+				self.$axios.post('http://'+self.$IP+':5000/fetch', qs.stringify(para), config)
+            .then(response => {
+              console.log(response)
+            })
+            .catch(function (error) {
+                alert(error);
+             })
 		},
 		methods:{
 			fetch(e){

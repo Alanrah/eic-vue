@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import Bus from '../bus.js'
+import qs from "qs"
 export default {
   data () {
     return {
@@ -47,8 +49,14 @@ export default {
           if(this.userInfo.userName == 'catherine' && this.userInfo.password == '123456' ){
           	if (window.plus){plus.nativeUI.toast("密登陆成功");}
           	this.$router.push('index')
-          	return true;
+            console.log(this.$IP)
+            this.$USER.user = this.userInfo.userName
+            this.$USER.password = this.userInfo.password
+            console.log(this.$USER)
+            return true
           }
+
+          
           this.$axios.post('/login',JSON.stringify(this.userInfo))
               .then(res => {
                   console.log(res)
@@ -63,6 +71,7 @@ export default {
                           type : 'success'
                       });
                       this.$router.push('index')
+                      this.$USER = this.userInfo.userName
                   }else {
                       this.$notify({
                           title : '提示信息',
