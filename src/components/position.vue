@@ -46,7 +46,9 @@
 		methods:{
       upload(){
         var self = this
-        var wt = plus.nativeUI.showWaiting();
+        var wt ;
+        if (window.plus)
+          wt = plus.nativeUI.showWaiting();
         var img = new Image,
             width = 512, //image resize   压缩后的宽
             quality = 0.5, //image quality  压缩质量
@@ -61,23 +63,44 @@
         var pic = base64.split(',')[1];
         var f=self.imgsrc;
         var filename=f.replace(f.substring(0, f.lastIndexOf('/') + 1), '');
+
+        if(self.uploadFile !== null){
+          console.log("web")
+          filename =  self.uploadFile.name
+          let reader = new FileReader();
+          reader.readAsDataURL(self.uploadFile);
+          reader.onload = function(e){
+            img.src = e.target.result;
+          }
+         img.onload = function(){
+         canvas.width = width;
+         canvas.height = width * (img.height / img.width);
+          drawer.drawImage(img, 0, 0, canvas.width, canvas.height);
+          base64 = canvas.toDataURL("image/*", quality); 
+          pic = base64.split(',')[1];
+        }
+}
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            //withCredentials: true,
           }
+      
 
         let para ={"fileString":pic,"filename":filename}
 
-        self.$axios.post('http://10.108.107.106:5000/position', qs.stringify(para), config)
+        self.$axios.post('http://'+self.$IP+':5000/position', qs.stringify(para), config)
             .then(response => {
               self.positionNum = response.data.split(',')[1];
               self.showPosition = true;
               let picUrl = response.data.split(',')[0];
               let d = {"file":picUrl,"positionNum":self.positionNum}
               Bus.$emit('position', d);
+               if (window.plus)
               wt.close();
             })
             .catch(function (error) {
                 alert(error);
+                 if (window.plus)
                 wt.close();
              })
       }

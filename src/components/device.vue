@@ -46,7 +46,9 @@
 		methods:{
       upload(){
         var self = this
-        var wt = plus.nativeUI.showWaiting();
+        var wt ;
+         if (window.plus)
+          wt = plus.nativeUI.showWaiting();
         var img = new Image,
             width = 512, //image resize   压缩后的宽
             quality = 0.5, //image quality  压缩质量
@@ -61,25 +63,49 @@
         var pic = base64.split(',')[1];
         var f=self.imgsrc;
         var filename=f.replace(f.substring(0, f.lastIndexOf('/') + 1), '');
+
+        if(self.uploadFile !== null){//支持浏览器上传图片
+          console.log("web")
+          filename =  self.uploadFile.name
+          let reader = new FileReader();
+          reader.readAsDataURL(self.uploadFile);
+          reader.onload = function(e){
+            img.src = e.target.result;
+          }
+         img.onload = function(){
+         canvas.width = width;
+         canvas.height = width * (img.height / img.width);
+          drawer.drawImage(img, 0, 0, canvas.width, canvas.height);
+          base64 = canvas.toDataURL("image/*", quality); 
+          pic = base64.split(',')[1];
+        }
+}
+
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            withCredentials: true,
+            //withCredentials: true,
           }
 
         let para ={"fileString":pic,"filename":filename}
 
-        self.$axios.post('http://10.108.107.106:5000/device', qs.stringify(para), config)
+        console.log(pic)
+        console.log(filename)
+        console.log('http://'+self.$IP+':5000/device'
+          )
+
+        self.$axios.post('http://'+self.$IP+':5000/device', qs.stringify(para), config)
             .then(response => {//返回图片存储地址和识别的结果
               self.deviceName = response.data.split(',')[1];
               self.showDeviceName = true;
               let picUrl = response.data.split(',')[0];
-              console.log(picUrl)
               let d = {"file":picUrl,"deviceName":self.deviceName}
               Bus.$emit('device', d);
+               if (window.plus)
               wt.close();
             })
             .catch(function (error) {
                 alert(error);
+                 if (window.plus)
                 wt.close();
              })
       }
@@ -133,7 +159,6 @@
         let self = this;
         if (!window.plus){
             self.addPic()
-            alert("不支持 plus");
             return;
           }
 

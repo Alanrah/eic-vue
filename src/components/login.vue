@@ -11,11 +11,12 @@
                     <input type="password" class="form-control" placeholder="密码" required="" v-model="userInfo.password">
                 </div>
                 <button type="submit" class="btn btn-primary block full-width m-b" @click="doLogin">登 录</button>
-
+                <p>测试账号：catherine 密码：123456</p>
+<!--
 
                 <p class="text-muted text-center"> <a href="login.html#"><small>忘记密码了？</small></a> | <a href="register.html">注册一个新账号</a>
                 </p>
-
+-->
             </div>
         </div>
     </div>
@@ -43,10 +44,10 @@ export default {
           	if (window.plus){plus.nativeUI.toast("密码名不能为空");}
               return false
           }
-          if(this.userInfo.userName == 'bnrc' && this.userInfo.password == 'bnrc123' ){
+          if(this.userInfo.userName == 'catherine' && this.userInfo.password == '123456' ){
           	if (window.plus){plus.nativeUI.toast("密登陆成功");}
-          	this.$router.push({path:'/index'})
-          	return;
+          	this.$router.push('index')
+          	return true;
           }
           this.$axios.post('/login',JSON.stringify(this.userInfo))
               .then(res => {
@@ -61,7 +62,7 @@ export default {
                           message : '登录成功',
                           type : 'success'
                       });
-                      this.$router.push({path:'/index'})
+                      this.$router.push('index')
                   }else {
                       this.$notify({
                           title : '提示信息',
