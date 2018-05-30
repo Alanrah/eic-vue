@@ -65,7 +65,7 @@ axios.interceptors.response.use(function(response){
 Vue.prototype.$axios = axios;
 
 Vue.prototype.$IP = "10.108.104.228"
-Vue.prototype.$USER={"user":"","password":""}
+Vue.prototype.$USER={"user":"","password":"","id":''}
 Vue.prototype.$IP = "10.108.107.106"
 import  { ConfirmPlugin } from 'vux'
 

@@ -27,69 +27,7 @@
 				txtInput: '',
         txtChange: '',
         searchValue:"",
-				lists:[
-					{
-						r_id:"机房1",
-						r_name:"A",
-						num:4,
-						devices:[{
-							d_id:1,
-		          d_name:'机柜1',
-		          last_modified:"2018/05/08/15:51:00.17",
-		          d_pic:'http://www.qianqigroup.com/Upload/product/max/SeverCabinet/19Inch19USeverCabinet11-18462028953.jpg'
-       			},{
-        			d_id:3,
-		          d_name:'路由器',
-		          last_modified:"2018/05/08/15:51:00.17",
-		          d_pic:'http://img2.imgtn.bdimg.com/it/u=3629577607,3477300825&fm=214&gp=0.jpg'
-        		},
-        		{
-							d_id:1,
-		          d_name:'机柜2',
-		          last_modified:"2018/05/08/15:51:00.17",
-		          d_pic:'http://bmp.skxox.com/201606/23/xiaowai.153607.jpg'
-       			},
-        		{
-	          d_id:2,
-		          d_name:'塔式服务器',
-		          last_modified:"2018/05/08/15:51:00.17",
-		          d_pic:'http://img1.imgtn.bdimg.com/it/u=1885317811,2314444115&fm=214&gp=0.jpg'
-        		}]
-					},
-
-					{
-						r_id:"机房2",
-						r_name:"B",
-						num:5,
-						devices:[{
-							d_id:1,
-		          d_name:'路由器',
-		          last_modified:"2018/05/08/15:51:00.17",
-		          d_pic:'http://pic.qiantucdn.com/58pic/11/01/52/72Q58PICATm.jpg'
-	       		},{
-	       			d_id:2,
-		          d_name:'机架式服务器',
-		          last_modified:"2018/05/08/15:51:00.17",
-	       			d_pic:"http://img009.hc360.cn/m6/M00/40/14/wKhQolY6V3-ETfLbAAAAAN2HnuA805.jpg"
-	       		},{
-	          	d_id:3,
-		          d_name:'路由器',
-		          last_modified:"2018/05/08/15:51:00.17",
-		          d_pic:'http://pic.qiantucdn.com/58pic/15/68/75/98k58PICp5W_1024.jpg'
-        		},{
-							d_id:4,
-		          d_name:'机柜1',
-		          last_modified:"2018/05/08/15:51:00.17",
-		          d_pic:'http://www.qianqigroup.com/Upload/product/max/SeverCabinet/19Inch19USeverCabinet11-18462028953.jpg'
-       			},{
-							d_id:5,
-		          d_name:'机柜2',
-		          last_modified:"2018/05/08/15:51:00.17",
-		          d_pic:'http://bmp.skxox.com/201606/23/xiaowai.153607.jpg'
-       			},]
-					},
-
-				],
+				lists:null,
 				refreshing:false,
 			}
 		},
@@ -103,31 +41,62 @@
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             //withCredentials: true,
           }
-          console.log(this.$USER.user)
         let para ={"user":this.$USER.user}
-        console.log(para)
 				self.$axios.post('http://'+self.$IP+':5000/fetch', qs.stringify(para), config)
             .then(response => {
-              console.log(response)
+              let data = response.data;
+							let deviceInfo=data[1];
+							self.$USER.id =deviceInfo[0].u_id;
+
+							let lists=data[0];
+							for(let list of lists){
+								list.devices=[];
+								list.num=0;
+								for(let device of deviceInfo){
+									if(device.r_id == list.r_id){
+										list.devices.push(device);
+										list.num = list.num+1;
+									}
+								}
+							}
+							self.lists = lists;
             })
             .catch(function (error) {
                 alert(error);
              })
 		},
 		methods:{
-			fetch(e){
-				this._data.loadmore = true;
-				setTimeout(()=>{
-					const length = this.lists.length;
-					for(let i = length;i<length+LOADMORE_COUNT;i++){
-						this.lists.push({r_id:i+1,r_name:"X",image:"image/1.jpg",placeholder:"测试"});
-					}
-					this._data.loadmore = false;},500)
-		},
-		onrefresh(e){
-			this.refreshing = true;
-			setTimeout(()=>{this.refreshing = false;},500);
-		},
+			fetchData(){
+				var self =this
+				let config = {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            //withCredentials: true,
+          }
+        let para ={"user":this.$USER.user}
+				self.$axios.post('http://'+self.$IP+':5000/fetch', qs.stringify(para), config)
+            .then(response => {
+              let data = response.data;
+							let deviceInfo=data[1];
+							self.$USER.id =deviceInfo[0].u_id;
+
+							let lists=data[0];
+							for(let list of lists){
+								list.devices=[];
+								list.num=0;
+								for(let device of deviceInfo){
+									if(device.r_id == list.r_id){
+										list.devices.push(device);
+										list.num = list.num+1;
+									}
+								}
+							}
+							self.lists = lists;
+            })
+            .catch(function (error) {
+                alert(error);
+             })
+          },
+
 		onpullingdown(e){
 			console.log(" pulling down ");
 		},
