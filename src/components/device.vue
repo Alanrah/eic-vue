@@ -65,7 +65,6 @@
         var filename=f.replace(f.substring(0, f.lastIndexOf('/') + 1), '');
 
         if(self.uploadFile !== null){//支持浏览器上传图片
-          console.log("web")
           filename =  self.uploadFile.name
           let reader = new FileReader();
           reader.readAsDataURL(self.uploadFile);
@@ -88,12 +87,7 @@
 
         let para ={"fileString":pic,"filename":filename}
 
-        console.log(pic)
-        console.log(filename)
-        console.log('http://'+self.$IP+':5000/device'
-          )
-
-        self.$axios.post('http://'+self.$IP+':5000/device', qs.stringify(para), config)
+        self.$axios.post('http://'+self.$IP+'/device', qs.stringify(para), config)
             .then(response => {//返回图片存储地址和识别的结果
               self.deviceName = response.data.split(',')[1];
               self.showDeviceName = true;
@@ -196,7 +190,6 @@
             plus.io.resolveLocalFileSystemURL(path, function(entry){
                   self.imgsrc= entry.toLocalURL();
                   self.show = true; 
-                  console.log("camera:"+entry.toLocalURL())
             }, function(e){plus.nativeUI.toast("读取拍照文件错误：" + e.message);  });  
         }, function(e){},{index:1,filename:"_doc/camera/"});  
       } , 
@@ -207,7 +200,6 @@
            plus.io.resolveLocalFileSystemURL(p, function(entry) { 
                   self.imgsrc= entry.toLocalURL();
                   self.show = true; 
-                  console.log("choice:"+entry.toLocalURL()) 
               
           }, function(e) {  
               plus.nativeUI.toast("读取拍照文件错误：" + e.message);  

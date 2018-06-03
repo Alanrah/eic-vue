@@ -65,7 +65,6 @@
         var filename=f.replace(f.substring(0, f.lastIndexOf('/') + 1), '');
 
         if(self.uploadFile !== null){
-          console.log("web")
           filename =  self.uploadFile.name
           let reader = new FileReader();
           reader.readAsDataURL(self.uploadFile);
@@ -88,7 +87,7 @@
 
         let para ={"fileString":pic,"filename":filename}
 
-        self.$axios.post('http://'+self.$IP+':5000/position', qs.stringify(para), config)
+        self.$axios.post('http://'+self.$IP+'/position', qs.stringify(para), config)
             .then(response => {
               self.positionNum = response.data.split(',')[1];
               self.showPosition = true;
@@ -195,7 +194,6 @@
             plus.io.resolveLocalFileSystemURL(path, function(entry){
                   self.imgsrc= entry.toLocalURL();
                   self.show = true; 
-                  console.log("camera:"+entry.toLocalURL())
  
             }, function(e){plus.nativeUI.toast("读取拍照文件错误：" + e.message);  });  
         }, function(e){},{index:1,filename:"_doc/camera/"});  
@@ -207,7 +205,6 @@
            plus.io.resolveLocalFileSystemURL(p, function(entry) { 
                   self.imgsrc= entry.toLocalURL();
                   self.show = true; 
-                  console.log("choice:"+entry.toLocalURL()) 
           }, function(e) {  
               plus.nativeUI.toast("读取拍照文件错误：" + e.message);  
           });  
