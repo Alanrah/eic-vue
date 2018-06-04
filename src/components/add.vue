@@ -1,13 +1,8 @@
 <template>
 	<div>
-		<div class="modifyEquip" v-on:click="jump">
-			修改个人机房设备信息
-		</div>
-		
 		<device></device>
 		<position></position>
 		<inserttodb></inserttodb>
-		<!---->
 	</div>
 </template>
 <script>
@@ -17,7 +12,6 @@
 	import device from './device.vue'
 	import position from './position.vue'
 	import inserttodb from './insert_to_db.vue'
-
 	export default{
 		
 		methods:{
@@ -32,32 +26,3 @@
 		}
 	}
 </script>
-<style scoped="scoped">
-	.icon{
-		display: flex;
-		width: 740px;
-		margin-top: 100px;
-		flex-direction: column;
-    align-items: center;
-		overflow: hidden;
-	}
-	
-	.modifyEquip{
-		display: none;
-		height: 68px;
-		width: 740px;
-		line-height: 80px;
-		text-align: center;
-		padding-left: 100px;
-		font-size: 40px;
-		padding-left: 40px;
-		padding-bottom: 5px;
-		border-width: 1px;
-		border-style: solid;
-		border-color: #A8A8A8;
-		border-radius: 25px;
-		position: fixed;
-		bottom: 95px;
-		background-color: #A7A5A5;
-	}
-</style>

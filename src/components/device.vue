@@ -135,7 +135,7 @@
 	        this.imgsrc = "";
 	        this.show = false;
 	        this.isPreview = false;
-          this.deviceName='';
+          this.deviceName=null;
           Bus.$emit('device', {"file":null,"deviceName":this.deviceName});
       },
       previewImage: function (url) {
@@ -225,7 +225,6 @@
 		margin-top:80px;
 	}
 	.list-li {
-
 		display: flex;
 		flex-direction: column;
     align-items: center;

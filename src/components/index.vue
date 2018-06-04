@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="out">
 
 		<header>
 			<input type="text" placeholder="search" class="inputSearch" :autofocus=false value=""/>
@@ -29,8 +29,6 @@
 	import qs from "qs"
 	import Vue from 'vue'
 	import Bus from '../bus.js'
-	//import myTree  from './tree.vue'
-	const LOADMORE_COUNT = 4;
 	export default{
 		data(){//从服务器获取数据
 			return{
@@ -50,17 +48,14 @@
 			
 		},
 		mounted(){
-			var self = this
-			Bus.$emit('cabinets',this.cabinetList());
 			Bus.$on('fresh',(e)=>{
-				self.fetchData();
+				this.fetchData();
 			})
 		},
 		created(){
 				var self =this
 				let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            //withCredentials: true,
           }
         let para ={"user":this.$USER.user}
 				self.$axios.post('http://'+self.$IP+'/fetch', qs.stringify(para), config)
@@ -96,10 +91,9 @@
 			      		}
 			      		cabinetInfo.push(roomCabinets)
 			      	}
-			      	console.log("cabinetInfo")
-			      	
-			      	self.$CabinetInfo = cabinetInfo;
-
+			      	console.log("created")
+			      	console.log(cabinetInfo)
+			      	self.$CabinetInfo = cabinetInfo
 			      	Bus.$emit('cabinets',cabinetInfo);
             })
             .catch(function (error) {
@@ -114,7 +108,7 @@
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             //withCredentials: true,
           }
-        let para ={"user":this.$USER.user}
+        let para ={"user":self.$USER.user}
 				self.$axios.post('http://'+self.$IP+'/fetch', qs.stringify(para), config)
             .then(response => {
               let data = response.data;
@@ -139,7 +133,11 @@
 								Vue.set(self.lists,i,lists[i])
 							}
 							console.log(self.lists)
-							Bus.$emit('cabinets',self.cabinetList());
+
+							let t = self.cabinetList();
+							console.log("fetchdata")
+			      	console.log(t)
+							Bus.$emit('cabinets',t);
             })
             .catch(function (error) {
                 alert(error);
@@ -162,8 +160,7 @@
       		}
       		cabinetInfo.push(roomCabinets)
       	}
-      	console.log("cabinetInfo")
-      	console.log(cabinetInfo)
+      	localStorage.setItem("cabinetInfo",JSON.stringify(cabinetInfo));
       	return cabinetInfo;
       },
 
@@ -235,7 +232,7 @@
   border-width: 1px;
   border-style: solid;
   border-color: #e5e5e5;
-  background-color: #B5F0E6;
+  background-color:#3EB1DD ;
   z-index: 99;
   overflow: scroll;
 }
@@ -243,16 +240,7 @@
   width: 100%;
   height: 40%;
 }
-	.list{
-		height: 1030px;
-		width: 740px;
-	}
-	.header{
-		text-align: center;
-		color: #000000;
-		font-size: 40px;
-		background-color: #B5F0E6;
-	}
+
 	.image{
 		width: 710px;
 		height: 250px;
@@ -260,9 +248,6 @@
 		top: 32px;
 		left: 14px;
 	}
-	.refresh{}
-	.indicator{}
-	.cell{}
 	.panel{
 		display: flex;
 		width: 710px;
@@ -281,10 +266,7 @@
 	.text{
 		font-size: 40px;
 		text-align: center;
-		color: #2E2E2E;
-	}
-	.cell{
-		margin-top: 10px;
+		color: #666666;
 	}
 	.inputSearch {
     font-size: 40px;
@@ -302,7 +284,7 @@
   }
   .addroom{
 		float: left;
-  	color: #2E2E2E;
+  	color:  #666666;
 		font-size: 40px;
     height: 50px;
     width: 400px;
@@ -314,6 +296,10 @@
 		border-color: rgb(162,217,192);
 		border-color: rgba(162,217,192,0.2);
 		border-radius: 25px;
-		background-color: #B5F0E6;
+		background-color: #D2E9FF;
+  }
+  .out{
+		display: flex;
+		flex-direction: column;
   }
 </style>

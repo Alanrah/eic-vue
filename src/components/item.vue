@@ -32,7 +32,6 @@
       <div class="preview" v-show="isPreview" @click="closePreview"> 
            <p>名称：{{device.d_name}}</p>
             <p>U位：{{device.d_u}}</p>
-            <p>地点：{{device.d_pos}}</p>
             <p>长度：{{device.d_length}}</p>
             <p>宽度：{{device.d_width}}</p>
             <p>高度：{{device.d_height}}</p>
@@ -41,11 +40,25 @@
             <p>序列号：{{device.d_seq}}</p>
         <img class="previewImg" :src="device.d_pic">
       </div>
+
+      <div class="preview" v-show="editDeviceShow">
+            <p>名称：<input class="input" v-model="device.d_name"></p>
+            <p>U位：<input class="input" v-model="device.d_u"></p>
+            <p>长度：<input class="input" v-model="device.d_length"></p>
+            <p>宽度：<input class="input" v-model="device.d_width"></p>
+            <p>高度：<input class="input" v-model="device.d_height"></p>
+            <p>状态：<input class="input" v-model="device.d_status"></p>
+            <p>生产商：<input class="input" v-model="device.d_producer"></p>
+            <p>序列号：<input class="input" v-model="device.d_seq"></p>
+            <div class="bwrap"> <button @click="confirmEdit">确认修改</button>
+              <button @click="quitEdit">退出修改</button></div>
+      </div>
   </div>
 </template>
 
 <script>
   import qs from "qs"
+  import Bus from '../bus.js'
 export default {
   components:{},
   props: {
@@ -62,6 +75,7 @@ export default {
       isPreview: false,
       previewroom:false,
       device:{},
+      editDeviceShow:false,
   }
   },
   methods:{
@@ -81,15 +95,59 @@ export default {
       },
       previewDevice: function (i) {
         let vm = this;
+        vm.editDeviceShow = false;
         vm.isPreview = true;
         vm.device = i;
       },
-      closePreview: function () {
+      closePreview: function (e) {
+        e.stopPropagation()
+        e.preventDefault();
         let vm = this;
         vm.isPreview = false;
         vm.device = {};
       },
-      edit:function(){alert("功能正在完善")},
+
+      edit:function(device){
+        let vm = this;
+        vm.editDeviceShow = true;
+        vm.isPreview = false;
+        vm.device = device;
+
+      },
+      quitEdit:function(){
+        this.editDeviceShow = false;
+        this.device = {};
+      },
+      confirmEdit:function(event){
+        event.preventDefault();
+        let vm = this;
+
+        let config = {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          }
+        let para =vm.device;
+        console.log(para)
+        vm.$axios.post('http://'+vm.$IP+'/operate/editDevice', qs.stringify(para), config)
+            .then(response => {
+              if(response.status == 200){
+                if( window.plus)
+                  plus.nativeUI.toast("修改成功");
+                else
+                  alert("修改成功")
+
+              Bus.$emit('fresh');
+              vm.editDeviceShow = false;
+              vm.device = {};
+              }
+
+            })
+            .catch(function (error) {
+                if( window.plus)
+                  plus.nativeUI.toast(error);
+                else
+                  alert(error)
+             })
+      },
 
       delet:function(device){
         let vm = this;
@@ -104,16 +162,19 @@ export default {
             .then(response => {
               if(response.status == 200){
                 if( window.plus)
-                plus.nativeUI.toast("删除成功");
-              else
-                alert("删除成功")
+                  plus.nativeUI.toast("删除成功");
+                else
+                  alert("删除成功")
 
               Bus.$emit('fresh')
               }
 
             })
             .catch(function (error) {
-                alert(error);
+                if( window.plus)
+                  plus.nativeUI.toast(error);
+                else
+                  alert(error)
              })
       },
 
@@ -129,11 +190,12 @@ export default {
 .sheet-list{
   margin-top: 2px;
   margin-bottom: 2px;
+  color: #666666;
 }
 .sheet-header{
     height: 60px;
     width: 748px;
-    background-color: #B5F0E6;
+    background-color: #D2E9FF;
     bottom: 2px;
     border-width: 1px;
     border-style: solid;
@@ -182,22 +244,46 @@ export default {
     justify-content: center;
 }
 .preview{
-  width: 500px;
-  height: 600px;
+  width: 450px;
+  height: 700px;
+  top: 200px;
+  position: fixed;
+  margin-left:150px;
+  margin-right:auto;
+  max-width: 500px;
+  background: #FFF;
+  padding: 30px 30px 20px 30px;
+  box-shadow: rgba(187, 187, 187, 1) 0 0px 20px -1px;
+  -webkit-box-shadow: rgba(187, 187, 187, 1) 0 0px 20px -1px;
+  font: Arial, Helvetica, sans-serif;
+  color: #666;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  z-index: 99;
+  overflow: scroll;
+}
+.test{width: 500px;
+  height: 700px;
   top: 300px;
   left: 200px;
   position: fixed;
   border-width: 1px;
   border-style: solid;
   border-color: #e5e5e5;
-  background-color: #B5F0E6;
+  background-color: #D2E9FF;
   z-index: 99;
   overflow: scroll;
-}
+  padding: 5px 0px 0px 5px;}
 .previewImg{
   width: 100%;
   height: 40%;
 }
+.bwrap{
+  display: flex;
+  justify-content: center;
+  padding-left: 20px;
+}
+
 .detail{
   background-image:url('http://pic.58pic.com/58pic/14/63/61/71s58PICrAg_1024.jpg');
   background-size:100% 100%;

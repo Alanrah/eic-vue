@@ -36,6 +36,7 @@
 		overflow: hidden;
 	}
 	.text{
+		color: #666666;
 		display: flex;
 		width: 740px;
 		height: 80px;
@@ -74,7 +75,7 @@
 	}
 	.prefix{
 		font-size: 40px;
-		color: #9A9090;
+		color: #666666;
 
 	}
 </style>

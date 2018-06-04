@@ -34,9 +34,10 @@
   .headerword{
     height: 60px;
     font-size: 40px;
-    border-color: #000000;
+    border-color: #E8E6E6;
     border-style: solid;
     border-width: 1px;
+    border-radius: 2px;
     align-items: center;
     text-align: center;
   }
@@ -49,18 +50,17 @@
     position: fixed;
     bottom: 0px;
     z-index: 10;
-    background-color: #B5F0E6;
+    background-color: #D2E9FF;
   }
   .template{
     height: 1100px;
     top: 0px;
-
     left: 0px;
     right: 0px;
   }
   .nav-item-selected{
     width: 250px;
-    color: #9ACD32;
+    color: #3EB1DD;
     text-align: center;
     line-height: 80px;
     height: 80px;
@@ -70,7 +70,7 @@
     width: 250px;
     line-height: 80px;
     height: 80px;
-    color: #000000;
+    color: #666666;
     text-align: center;
     font-size: 40px;
   }

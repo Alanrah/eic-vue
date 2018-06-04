@@ -227,7 +227,6 @@
 		margin-top:80px;
 	}
 	.list-li {
-
 		display: flex;
 		flex-direction: column;
     align-items: center;
@@ -249,7 +248,7 @@
   .list-link a:visited {
     background-color: #465c71;
     border: 1px #4e667d solid;
-    color: #dde4ec;
+    color: #666666;
     display: flex;
     line-height: 1.35em;
     padding: 4px 20px;

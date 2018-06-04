@@ -192,6 +192,7 @@ export default {
 *{  
   margin: 0;  
   padding: 0;  
+  color: #666666;
 }   
 .picture {  
   width: 200px;  

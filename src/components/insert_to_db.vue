@@ -1,10 +1,10 @@
 <template>
-	<div style="margin-top: 10px;">
+	<div style="margin-top: 10px;color:#666666;">
 		<div class="insert" v-show="showInsert">
 			<p>识别结果如下：</p>
 
 			<div v-show="showDeviceName" class="line">
-				<p>该设备类型：<input class="input" v-model="deviceName"></p>
+				<p>该设备名称：<input class="input" v-model="deviceName"></p>
 			</div>
 
 			<div v-show="showPosition" class="line">
@@ -35,7 +35,7 @@
 	export default {
 		data(){
 			return{
-				deviceName:'',//d_name
+				deviceName:null,//d_name
 				deviceFile:null,//d_pic
 				positionNum:-1,//d_u
 				positionFile:null,//pos_pic
@@ -65,7 +65,7 @@
 				return false;
 			},
 			showDeviceName(){
-				if(this._data.deviceName!='')
+				if(this._data.deviceName!=null)
 	    		return true;
 				return false;
 			}
@@ -81,7 +81,12 @@
 	    });
 
 	    Bus.$on('cabinets',(e)=>{
-	    	this._data.cabinets = e;
+	    	if(e)
+	    		this._data.cabinets = e;
+	    	else 
+	    		this._data.cabinets=self.$CabinetInfo
+	    	
+	    	console.log("cabinetInfo")
 	    	console.log(this.cabinets)
 	    });
   } ,
