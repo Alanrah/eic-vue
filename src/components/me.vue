@@ -17,8 +17,8 @@
 	export default{
 		data(){
 			return{
-					name:"Catherine",
-					ID:"12343544667",
+					name:this.$USER.user,
+					ID:this.$USER.id,
 					introduction:"啥也不留",
 					hint:0,
 					usericon:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525928989050&di=86f9e7f2efc098cf7e4f00949997c832&imgtype=0&src=http%3A%2F%2Fpic.90sjimg.com%2Fback_pic%2Fqk%2Fback_origin_pic%2F00%2F01%2F79%2F50c42a7c9c0c1ec2a219d5755af8af42.jpg",

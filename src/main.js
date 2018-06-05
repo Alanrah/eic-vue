@@ -7,7 +7,7 @@ import router from './router'
 import axios from 'axios';
 
 //请求超时时限 我设置500毫秒
-axios.defaults.timeout =  500;
+axios.defaults.timeout = 2000;
 
 //请求次数
 axios.defaults.retry = 4;
@@ -59,7 +59,7 @@ Vue.prototype.$axios = axios;
 
 Vue.prototype.$IP = "10.108.104.228:5000"
 Vue.prototype.$USER={"user":"","password":"","id":''}
-Vue.prototype.$IP = "10.108.107.106:5000"
+//Vue.prototype.$IP = "10.108.107.106:5000"
 Vue.prototype.$CabinetInfo = []
 
 

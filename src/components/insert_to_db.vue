@@ -1,5 +1,5 @@
 <template>
-	<div style="margin-top: 10px;color:#666666;">
+	<div style="margin-top: 10px;color:#666666;margin-left:30px;">
 		<div class="insert" v-show="showInsert">
 			<p>识别结果如下：</p>
 
@@ -12,19 +12,19 @@
 			</div> 
 
 			<div v-show="showSubmit" class="line">
-				<select v-model="selectRoom">	
+				<select  class="selecto" v-model="selectRoom">	
 					<option disabled value="">选择机房</option>
 			    <option v-for="option in cabinets" v-bind:value="option.r_id">{{ option.r_name }}</option>
 			  </select>	
 
-			  <select v-model="selectCabinet">
+			  <select class="selecto" v-model="selectCabinet">
 			    <option disabled value="">选择机柜</option>
 			    <option v-for="option in cabinetOption" v-bind:value="option.d_id">{{ option.d_name }}</option>
 			    <option value=0>不在机柜里</option>
 			    <option value=-1>是机柜</option>
 			  </select>	
-
-			<button  @click="submitInsert">确认添加设备到机房数据库</button>
+			<br>
+			<button style="height:30px"  @click="submitInsert">确认添加设备到机房数据库</button>
 		</div>
 		</div>
 	</div>
@@ -41,7 +41,7 @@
 				positionFile:null,//pos_pic
 				selectRoom:'',//r_id
 				selectCabinet:'',//c_id
-				cabinets:[],
+				cabinets:null,
 			}
 		},
 		computed:{
@@ -70,7 +70,19 @@
 				return false;
 			}
 		},
+		created(){
+			console.log("created")
+	    	console.log(this.cabinets)
+			this.cabinets=JSON.parse(localStorage.getItem("cabinetInfo"));
+		},
 		mounted(){
+			Bus.$on('cabinetss',(e)=>{
+	    	this._data.cabinets = e;
+	    	if(!this.cabinets)
+	    		this.cabinets=JSON.parse(localStorage.getItem("cabinetInfo"));
+	    	console.log("mounted")
+	    	console.log(this.cabinets)
+	    });
 	    Bus.$on('device',(e)=>{
 	    	this._data.deviceName=e.deviceName;
 	    	this._data.deviceFile=e.file;
@@ -80,15 +92,7 @@
 	    	this._data.positionFile=e.file;
 	    });
 
-	    Bus.$on('cabinets',(e)=>{
-	    	if(e)
-	    		this._data.cabinets = e;
-	    	else 
-	    		this._data.cabinets=self.$CabinetInfo
-	    	
-	    	console.log("cabinetInfo")
-	    	console.log(this.cabinets)
-	    });
+	    
   } ,
   methods:{
   	submitInsert(){
@@ -138,6 +142,7 @@
 </script>
 <style>
 	.insert{
+
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
@@ -150,5 +155,9 @@
 	.input{
 		height: 30px;
 		width: 200px;
+	}
+	.selecto{
+		height:50px;
+		margin-bottom: 20px;
 	}
 </style>

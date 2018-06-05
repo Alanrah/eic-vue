@@ -1,23 +1,22 @@
 <template>
   <div id="bg" class="bg">
   	<div class="signinpanel">
-        <div class="row">
             <div class="col-sm-12">
-                    <p class="m-t-md">欢迎登录设备信息采集系统</p>
+                    <p>注册</p>
                 <div class="form-group">
                     <input type="email" class="form-control" placeholder="用户名" required="" v-model="userInfo.userName">
                 </div>
                 <div class="form-group">
                     <input type="password" class="form-control" placeholder="密码" required="" v-model="userInfo.password">
                 </div>
-                <!--<label><input type="checkbox" v-model="checked" >一周内自动登录</label><br/>-->
-                <button type="submit" class="btn btn-primary block full-width m-b" @click="submitForm">登 录</button>
-                <p>测试账号：Catherine 密码：123456</p>
-
-                <button  @click="register">注册一个新账号</button>
-
+                <div class="form-group">
+                    <input type="tel" class="form-control" placeholder="电话" required="" v-model="userInfo.tel">
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="邮箱" required="" v-model="userInfo.email">
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b" @click="submitForm">注册</button>
             </div>
-        </div>
     </div>
   </div>
 </template>
@@ -31,18 +30,18 @@ export default {
      userInfo :{
           userName : '',
           password : '',
+          tel:'',
+          email:'',
       },
-      checked:false,
   }
 },
 methods: {
-    register(){
-      this.$router.push('register')
-    },
     submitForm() {
       var self=this;
         var name=self.userInfo.userName;
         var pass=self.userInfo.password;
+        var email = self.userInfo.email;
+        var tel =self.userInfo.tel;
         if(name==''||name==null){
           if (window.plus){plus.nativeUI.toast("请输入正确的用户名");}
           else alert("请输入正确的用户名")
@@ -52,30 +51,34 @@ methods: {
           else alert("密码名不能为空")
           return
         }
-        if(self.checked=true){
-          self.setCookie(name,pass,7);
+        else if(email==''||email==null) {
+          if (window.plus){plus.nativeUI.toast("邮箱不能为空");}
+          else alert("邮箱不能为空")
+          return
+        }
+        else if(tel==''||tel==null) {
+          if (window.plus){plus.nativeUI.toast("电话不能为空");}
+          else alert("电话不能为空")
+          return
         }
         //接口
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           }
-        let para ={"userName":self.userInfo.userName ,"password":self.userInfo.password}
-        console.log(para)
+        let para ={"userName":self.userInfo.userName ,"password":self.userInfo.password,"tel":self.userInfo.tel,"email":self.userInfo.email}
 
-        self.$axios.post('http://'+self.$IP+'/login', qs.stringify(para), config)
+        self.$axios.post('http://'+self.$IP+'/register', qs.stringify(para), config)
           .then(res => {
-              if(res.status == 200 && res.data!='fail'){
-                  if (window.plus){plus.nativeUI.toast("登陆成功");}
-                  self.$USER.user = self.userInfo.userName
-                  self.$USER.password = self.userInfo.password
-                  self.$router.push('index')
-                  self.$USER.id = res.data;
+              if(res.status == 200 && res.data=='exist'){
+                  if (window.plus){plus.nativeUI.toast("该用户名已存在，请重新输入");}
+                  else alert("该用户名已存在，请重新输入")
+                    self.userInfo.userName='';
+                    self.userInfo.password='';
+                        return
               }else {
-                    if (window.plus){plus.nativeUI.toast("用户名或密码错误,请重新输入");}
-                    else alert("用户名或密码错误,请重新输入");
-                      self.userInfo.userName='';
-                      self.userInfo.password='';
-                      return
+                    if (window.plus){plus.nativeUI.toast("注册成功，请登录");}
+                    else alert("注册成功，请登录");
+                    self.$router.push('login')
               }
           })
           .catch(err => {
@@ -87,34 +90,8 @@ methods: {
           })
 
     },
-  setCookie(c_name,c_pwd,exdays) {
-    var exdate=new Date();
-    exdate.setTime(exdate.getTime() + 24*60*60*1000*exdays);
-    window.document.cookie="userName"+ "=" +c_name+";path=/;expires="+exdate.toGMTString();
-    window.document.cookie="userPwd"+"="+c_pwd+";path=/;expires="+exdate.toGMTString();
-  },
-  getCookie:function () {
-    if (document.cookie.length>0) {
-      var arr=document.cookie.split('; ');
-      for(var i=0;i<arr.length;i++){
-        var arr2=arr[i].split('=');
-        if(arr2[0]=='userName'){
-          this.userInfo.userName=arr2[1];
-        }else if(arr2[0]=='userPwd'){
-          this.userInfo.password=arr2[1];
-        }
-      }
-    }
-  },
-
-  clearCookie:function () {
-    this.setCookie("","",-1);//修改2值都为空，天数为负1天就好了
-  }
 },
 
-mounted(){
-        this.getCookie()
-        }
 }
 </script>
 
@@ -122,7 +99,7 @@ mounted(){
 <style scoped="scoped">
   .bg {
   	 width: 750px;
-  	 height: 1440px;
+  	 height: 1340px;
   	 position: fixed;
   	 left: 0;
   	 right: 0;
@@ -137,14 +114,13 @@ mounted(){
   .signinpanel {
     width: 500px;
     margin: 10% auto 0 auto;
-    text-align: center;
 }
 
 
 .signinpanel .form-control {
     display: block;
-    margin-top: 15px;
     margin-left: 40px;
+    margin-top: 15px;
     height: 60px;
 }
 
@@ -171,5 +147,6 @@ mounted(){
     -webkit-border-radius: 3px;
     border-radius: 3px;
     padding: 30px;
+    text-align: center;
 }
 </style>

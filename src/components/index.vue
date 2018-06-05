@@ -10,17 +10,19 @@
 		</div>
 		<div class="addroom" @click="roomInsert">
 			添加新机房
-			<div class="preview" v-show="previewroom">
-            <p>名称：<input class="input" v-model="room.name"></p>
-            <p>所有者：<input class="input" v-model="room.owner"></p>
-            <p>地点：<input class="input" v-model="room.pos"></p>
-            <p>长度：<input class="input" v-model="room.length"></p>
-            <p>宽度：<input class="input" v-model="room.width"></p>
-            <p>高度：<input class="input" v-model="room.height"></p>
-            <!--<p>图片：<input class="input" type="file"></p>-->
-            <button @click="confirmAdd">确认添加</button>
-          </div>
 		</div>
+		<div class="preview" v-show="previewroom">
+        <p>名称：<input class="input" v-model="room.name"></p>
+        <p>所有者：<input class="input" v-model="room.owner"></p>
+        <p>地点：<input class="input" v-model="room.pos"></p>
+        <p>长度：<input class="input" v-model="room.length"></p>
+        <p>宽度：<input class="input"  v-model="room.width"></p>
+        <p>高度：<input class="input"  v-model="room.height"></p>
+        <!--<p>图片：<input class="input" type="file"></p>-->
+        <div class="bwrap">
+         <button   @click="confirmAdd">确认</button>
+         <button   @click="quitAdd">退出</button></div>
+      </div>
 
 	</div>
 </template>
@@ -36,7 +38,7 @@
 				txtInput: '',
         txtChange: '',
         searchValue:"",
-				lists:null,
+				lists:[],
 				refreshing:false,
 				previewroom:false,
 				room:{}
@@ -48,57 +50,10 @@
 			
 		},
 		mounted(){
+			this.fetchData();
 			Bus.$on('fresh',(e)=>{
 				this.fetchData();
 			})
-		},
-		created(){
-				var self =this
-				let config = {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-          }
-        let para ={"user":this.$USER.user}
-				self.$axios.post('http://'+self.$IP+'/fetch', qs.stringify(para), config)
-            .then(response => {
-              let data = response.data;
-							let deviceInfo=data[1];
-							self.$USER.id =deviceInfo[0].u_id;
-
-							let lists=data[0];
-							for(let list of lists){
-								list.devices=[];
-								list.num=0;
-								for(let device of deviceInfo){
-									if(device.r_id == list.r_id){
-										list.devices.push(device);
-										list.num = list.num+1;
-									}
-								}
-							}
-							self.lists = lists;
-							if(! self.lists)
-			      		return ;
-			      	let cabinetInfo = []
-			      	for( let list of self.lists){
-			      		let roomCabinets = {}
-			      		roomCabinets.r_id = list.r_id;
-			      		roomCabinets.r_name = list.r_name;
-			      		roomCabinets.r_owner = list.r_owner;
-			      		roomCabinets.cabinets = []
-			      		for(let device of list.devices){
-			      			if(device.c_id==device.d_id)
-			      				roomCabinets.cabinets.push(device);
-			      		}
-			      		cabinetInfo.push(roomCabinets)
-			      	}
-			      	console.log("created")
-			      	console.log(cabinetInfo)
-			      	self.$CabinetInfo = cabinetInfo
-			      	Bus.$emit('cabinets',cabinetInfo);
-            })
-            .catch(function (error) {
-                alert(error);
-             })
 		},
 		methods:{
 			fetchData(){
@@ -106,7 +61,6 @@
 				var self =this
 				let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            //withCredentials: true,
           }
         let para ={"user":self.$USER.user}
 				self.$axios.post('http://'+self.$IP+'/fetch', qs.stringify(para), config)
@@ -115,7 +69,8 @@
 							let deviceInfo=data[1];
 							self.$USER.id =deviceInfo[0].u_id;
 
-							self.lists.splice(0, self.lists.length)
+							if(self.lists)
+								self.lists.splice(0, self.lists.length)
 
 							let lists=data[0];
 							for(let list of lists){
@@ -137,7 +92,9 @@
 							let t = self.cabinetList();
 							console.log("fetchdata")
 			      	console.log(t)
-							Bus.$emit('cabinets',t);
+							Bus.$emit('cabinetss',t);
+							console.log(Bus)
+							console.log("触发")
             })
             .catch(function (error) {
                 alert(error);
@@ -160,6 +117,7 @@
       		}
       		cabinetInfo.push(roomCabinets)
       	}
+      	self.$CabinetInfo = cabinetInfo
       	localStorage.setItem("cabinetInfo",JSON.stringify(cabinetInfo));
       	return cabinetInfo;
       },
@@ -178,6 +136,9 @@
 		    reader.onload = function(e){
 	        self.room.pic= e.target.result;//图片内容的base64编码
 		    }
+    },
+    quitAdd(){
+			this.previewroom =false;
     },
 
     confirmAdd:function(e){
@@ -219,26 +180,28 @@
 }
 </script>
 <style scoped="scoped">
+.bwrap{
+  display: flex;
+  justify-content: center;
+}
 	.input{
-		height: 30px;
+		height: 50px;
 		width: 200px;
 	}
 .preview{
-  width: 500px;
-  height: 600px;
-  top: 300px;
-  left: 200px;
+	display: flex;
+	flex-direction: column;
+  width: 450px;
+  height: 700px;
+  top: 200px;
   position: fixed;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #e5e5e5;
-  background-color:#3EB1DD ;
+  margin-left:150px;
+  background: #ECECEC;
+  color: #666;
+  border-radius: 10px;
   z-index: 99;
   overflow: scroll;
-}
-.previewImg{
-  width: 100%;
-  height: 40%;
+  padding: 30px 30px 20px 30px;
 }
 
 	.image{
@@ -256,7 +219,6 @@
 		margin-bottom: 20px;
 		flex-direction: column;
 		align-items: center;
-		justify-content: center;
 		border-width: 2px;
 		border-style: solid;
 		border-color: rgb(162,217,192);
@@ -293,7 +255,6 @@
 		position: relative;
     border-width: 2px;
 		border-style: solid;
-		border-color: rgb(162,217,192);
 		border-color: rgba(162,217,192,0.2);
 		border-radius: 25px;
 		background-color: #D2E9FF;

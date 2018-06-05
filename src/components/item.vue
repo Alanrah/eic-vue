@@ -2,14 +2,17 @@
   <div class="sheet-list">
       <div class="sheet-header" >
           <i class="icon iconfont icon-enter" ref="toggleicon"></i>
-          <span class="sheet-header-span" ><span @click="toggleSheet">机房: {{data_item.r_name }} ,设备数：{{data_item.num}}</span><span class="detail" @click="previewRoom">详</span> </span>
+          <span class="sheet-header-span" >
+            <span @click="toggleSheet">机房: {{data_item.r_name }} ,设备数：{{data_item.num}}</span>
+            <span class="detail" @click="previewRoom"></span> 
+          </span>
           <div class="preview" v-show="previewroom"  @click="previewRoom">
-            <p>名称：{{data_item.r_name}}</p>
-            <p>所有者：{{data_item.r_owner}}</p>
-            <p>地点：{{data_item.r_pos}}</p>
-            <p>长度：{{data_item.r_length}}</p>
-            <p>宽度：{{data_item.r_width}}</p>
-            <p>高度：{{data_item.r_height}}</p>
+            <p class="input">名称：{{data_item.r_name}}</p>
+            <p class="input">所有者：{{data_item.r_owner}}</p>
+            <p class="input">地点：{{data_item.r_pos}}</p>
+            <p class="input">长度：{{data_item.r_length}}</p>
+            <p class="input">宽度：{{data_item.r_width}}</p>
+            <p class="input">高度：{{data_item.r_height}}</p>
             <img class="previewImg" :src="data_item.r_pic" alt="机房图片">
           </div>
       </div>
@@ -30,26 +33,26 @@
       </div>
 
       <div class="preview" v-show="isPreview" @click="closePreview"> 
-           <p>名称：{{device.d_name}}</p>
-            <p>U位：{{device.d_u}}</p>
-            <p>长度：{{device.d_length}}</p>
-            <p>宽度：{{device.d_width}}</p>
-            <p>高度：{{device.d_height}}</p>
-            <p>状态：{{device.d_status}}</p>
-            <p>生产商：{{device.d_producer}}</p>
-            <p>序列号：{{device.d_seq}}</p>
-        <img class="previewImg" :src="device.d_pic">
+           <p class="input">名称：{{device.d_name}}</p>
+            <p class="input">U位：{{device.d_u}}</p>
+            <p class="input">长度：{{device.d_length}}</p>
+            <p class="input">宽度：{{device.d_width}}</p>
+            <p class="input">高度：{{device.d_height}}</p>
+            <p class="input">状态：{{device.d_status}}</p>
+            <p class="input">生产商：{{device.d_producer}}</p>
+            <p class="input">序列号：{{device.d_seq}}</p>
+        <img class="previewImg" :src="device.d_pic" alt="设备图片">
       </div>
 
       <div class="preview" v-show="editDeviceShow">
-            <p>名称：<input class="input" v-model="device.d_name"></p>
-            <p>U位：<input class="input" v-model="device.d_u"></p>
-            <p>长度：<input class="input" v-model="device.d_length"></p>
-            <p>宽度：<input class="input" v-model="device.d_width"></p>
-            <p>高度：<input class="input" v-model="device.d_height"></p>
-            <p>状态：<input class="input" v-model="device.d_status"></p>
-            <p>生产商：<input class="input" v-model="device.d_producer"></p>
-            <p>序列号：<input class="input" v-model="device.d_seq"></p>
+            <p>名称：<input class="inputt" v-model="device.d_name"></p>
+            <p>U位：<input class="inputt" v-model="device.d_u"></p>
+            <p>长度：<input class="inputt" v-model="device.d_length"></p>
+            <p>宽度：<input class="inputt" v-model="device.d_width"></p>
+            <p>高度：<input class="inputt" v-model="device.d_height"></p>
+            <p>状态：<input class="inputt" v-model="device.d_status"></p>
+            <p>生产商：<input class="inputt" v-model="device.d_producer"></p>
+            <p>序列号：<input class="inputt" v-model="device.d_seq"></p>
             <div class="bwrap"> <button @click="confirmEdit">确认修改</button>
               <button @click="quitEdit">退出修改</button></div>
       </div>
@@ -187,6 +190,14 @@ export default {
 
 
 <style scoped="scoped">
+.input{
+    height: 60px;
+    width: 100%;
+  }
+  .inputt{
+    height: 50px;
+    width: 300px;
+  }
 .sheet-list{
   margin-top: 2px;
   margin-bottom: 2px;
@@ -251,7 +262,7 @@ export default {
   margin-left:150px;
   margin-right:auto;
   max-width: 500px;
-  background: #FFF;
+  background: #ECECEC;
   padding: 30px 30px 20px 30px;
   box-shadow: rgba(187, 187, 187, 1) 0 0px 20px -1px;
   -webkit-box-shadow: rgba(187, 187, 187, 1) 0 0px 20px -1px;
@@ -262,21 +273,10 @@ export default {
   z-index: 99;
   overflow: scroll;
 }
-.test{width: 500px;
-  height: 700px;
-  top: 300px;
-  left: 200px;
-  position: fixed;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #e5e5e5;
-  background-color: #D2E9FF;
-  z-index: 99;
-  overflow: scroll;
-  padding: 5px 0px 0px 5px;}
+
 .previewImg{
-  width: 100%;
-  height: 40%;
+  width: 200px;
+  height: 200px;
 }
 .bwrap{
   display: flex;
@@ -285,8 +285,10 @@ export default {
 }
 
 .detail{
-  background-image:url('http://pic.58pic.com/58pic/14/63/61/71s58PICrAg_1024.jpg');
+  background-image:url('http://10.108.104.228:5000/static/devicePic/assets/detail.png');
   background-size:100% 100%;
   float:right;
+  width: 60px;
+  height: 60px;
 }
 </style>
