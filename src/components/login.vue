@@ -1,7 +1,6 @@
 <template>
   <div id="bg" class="bg">
   	<div class="signinpanel">
-        <div class="row">
             <div class="col-sm-12">
                     <p class="m-t-md">欢迎登录设备信息采集系统</p>
                 <div class="form-group">
@@ -11,13 +10,12 @@
                     <input type="password" class="form-control" placeholder="密码" required="" v-model="userInfo.password">
                 </div>
                 <!--<label><input type="checkbox" v-model="checked" >一周内自动登录</label><br/>-->
-                <button type="submit" class="btn btn-primary block full-width m-b" @click="submitForm">登 录</button>
+                <button type="submit" class="btn" @click="submitForm">登 录</button>
                 <p>测试账号：Catherine 密码：123456</p>
 
                 <button  @click="register">注册一个新账号</button>
 
             </div>
-        </div>
     </div>
   </div>
 </template>
@@ -57,19 +55,19 @@ methods: {
         }
         //接口
         let config = {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            headers: {'Content-Type':'application/x-www-form-urlencoded'},
           }
         let para ={"userName":self.userInfo.userName ,"password":self.userInfo.password}
-        console.log(para)
 
         self.$axios.post('http://'+self.$IP+'/login', qs.stringify(para), config)
           .then(res => {
-              if(res.status == 200 && res.data!='fail'){
+              if(res.status == 200 && res.data=='success'){
                   if (window.plus){plus.nativeUI.toast("登陆成功");}
                   self.$USER.user = self.userInfo.userName
                   self.$USER.password = self.userInfo.password
-                  self.$router.push('index')
+                  self.$router.push('index');
                   self.$USER.id = res.data;
+                  Bus.$emit("changeindex","yes")
               }else {
                     if (window.plus){plus.nativeUI.toast("用户名或密码错误,请重新输入");}
                     else alert("用户名或密码错误,请重新输入");
@@ -136,10 +134,9 @@ mounted(){
   }
   .signinpanel {
     width: 500px;
-    margin: 10% auto 0 auto;
+    margin: 230px auto 0 auto;
     text-align: center;
 }
-
 
 .signinpanel .form-control {
     display: block;
@@ -148,20 +145,10 @@ mounted(){
     height: 60px;
 }
 
-.signinpanel .uname {
-    background: #fff ;color:#333;
-}
-
-.signinpanel .pword {
-    background: #fff ;color:#333;
-}
-
 .signinpanel .btn {
     margin-top: 15px;
 }
-
 .col-sm-12 {
-		top: 350px;
     background: rgba(255, 255, 255, 0.2);
     border: 1px solid rgba(255,255,255,.3);
     -moz-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);

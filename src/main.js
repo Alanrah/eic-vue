@@ -7,7 +7,7 @@ import router from './router'
 import axios from 'axios';
 
 //请求超时时限 我设置500毫秒
-axios.defaults.timeout = 2000;
+axios.defaults.timeout = 1000;
 
 //请求次数
 axios.defaults.retry = 4;

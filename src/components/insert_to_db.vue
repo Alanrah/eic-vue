@@ -104,17 +104,19 @@
 
   		let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            //withCredentials: true,
           }
+      let d_u = self.positionNum;
+       if(self.selectCabinet ==''){//是机柜
+       	self.selectCabinet = 0;
+       	d_u=0;
+       }
+       if(self.selectCabinet ==0){//不在机柜里
+       	 d_u=-1;
+       }
+       	
 
-       if(self.selectCabinet =='')//d_u>1 && c_id 设备在机柜里，d_u=0,c_id =d_id 是机柜，d_u=0,c_id =0，设备不是机柜 不在机柜里
-       	self.selectCabinet = -1;
-       if(self.selectCabinet ==0)
-       	self.positionNum=0
+      let para ={"r_id":self.selectRoom.toString() ,"c_id":self.selectCabinet,"pos_pic":d_u,"d_name":self.deviceName,"d_u":self.positionNum,"d_pic":self.deviceFile}
 
-      let para ={"r_id":self.selectRoom.toString() ,"c_id":self.selectCabinet,"pos_pic":self.positionFile,"d_name":self.deviceName,"d_u":self.positionNum,"d_pic":self.deviceFile}
-
-      console.log(para)
 
       self.$axios.post('http://'+self.$IP+'/operate/insertDevice', qs.stringify(para), config)
           .then(response => {
@@ -142,18 +144,18 @@
 </script>
 <style>
 	.insert{
-
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
 	}
 	.line{
-		height: 50px;
+		height: 70px;
 		float: left;
 		margin-top: 0px;
+		margin-top: 10px;
 	}
 	.input{
-		height: 30px;
+		height: 60px;
 		width: 200px;
 	}
 	.selecto{

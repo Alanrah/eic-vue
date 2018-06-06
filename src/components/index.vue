@@ -2,60 +2,113 @@
 	<div class="out">
 
 		<header>
-			<input type="text" placeholder="search" class="inputSearch" :autofocus=false value=""/>
+			<input type="text" placeholder="search device" class="inputSearch" v-model="keyword" v-on:input="search"/>
 		</header>
 
-		<div class="panel" >
-				<Item v-for="(item,index) in lists" :item="item" :key="index" @childrefresh="fetchData"></Item>
+		<div class="panel" v-show="showItem">
+				<Item  v-for="(item,index) in lists" :item="item" :key="index"></Item>
 		</div>
-		<div class="addroom" @click="roomInsert">
+		<div v-show="showItem" class="addroom" @click="roomInsert">
 			添加新机房
 		</div>
 		<div class="preview" v-show="previewroom">
-        <p>名称：<input class="input" v-model="room.name"></p>
-        <p>所有者：<input class="input" v-model="room.owner"></p>
-        <p>地点：<input class="input" v-model="room.pos"></p>
-        <p>长度：<input class="input" v-model="room.length"></p>
-        <p>宽度：<input class="input"  v-model="room.width"></p>
-        <p>高度：<input class="input"  v-model="room.height"></p>
+        <p class="inputp">名称：<input class="input" v-model="room.name"></p>
+        <p class="inputp">所有者：<input class="input" v-model="room.owner"></p>
+        <p class="inputp">地点：<input class="input" v-model="room.pos"></p>
+        <p class="inputp">长度：<input class="input" v-model="room.length"></p>
+        <p class="inputp">宽度：<input class="input"  v-model="room.width"></p>
+        <p class="inputp">高度：<input class="input"  v-model="room.height"></p>
         <!--<p>图片：<input class="input" type="file"></p>-->
         <div class="bwrap">
-         <button   @click="confirmAdd">确认</button>
-         <button   @click="quitAdd">退出</button></div>
+         <button style="height:60px;"  @click="confirmAdd">确认</button>
+         <button style="height:60px;"  @click="quitAdd">退出</button></div>
       </div>
+			
+			<div class="panel" v-show="searchResultShow">
+	      <div  class="sheet-content" v-for="i in searchResult">
+	          <div class="sheet-content-image">
+	              <img class="image" :src="i.d_pic">
+	          </div>
+	          <div class="sheet-content-list">
+	          	<div class="sheet-content-middle">
+	              设备名称：{{i.d_name}}
+		          </div>
+		          <div class="sheet-content-middle">
+		              所在机房名：{{i.r_name}}
+		          </div>
+		          <div class="sheet-content-middle">
+		              所在机柜名：{{i.c_name}}
+		          </div>
+	          </div>
+	      </div>
+		</div>
 
 	</div>
 </template>
 <script>
 	import Item from './item.vue'
 	import qs from "qs"
-	import Vue from 'vue'
 	import Bus from '../bus.js'
 	export default{
 		data(){//从服务器获取数据
 			return{
 				user:this.$USER,
-				txtInput: '',
-        txtChange: '',
-        searchValue:"",
+				keyword: '',
+				searchResult:[],
 				lists:[],
-				refreshing:false,
 				previewroom:false,
-				room:{}
+				room:{},
+				searchResultShow:false,
+				showItem:true,
 			}
 		},
 
 		components:{
 			Item,
-			
 		},
+		created(){this.fetchData();},
 		mounted(){
-			this.fetchData();
 			Bus.$on('fresh',(e)=>{
 				this.fetchData();
 			})
 		},
+		watch:{
+			keyword(newValue, oldValue) {  
+        if(newValue == "")  {
+        	this.searchResultShow =false;
+      		this.showItem = true;
+        }
+    	}
+		},
 		methods:{
+			search(){
+				let keyword=this.keyword;
+				if(keyword=="") {
+					this.searchResultShow =false;
+      		this.showItem = true;
+					return
+				}
+				let searchResult = []
+
+      	for( let list of this.lists){
+      		for(let device of list.devices){
+      			if(device.d_name.indexOf(keyword)>-1 || keyword.indexOf(device.d_name)>-1){
+      					device.r_name = list.r_name;
+		      			if(device.c_id>=1 && device.c_id !== device.d_id){
+		      				for(let d of list.devices){
+		      					if(d.d_id == device.c_id)
+		      						device.c_name = d.d_name;
+		      				}
+		      			}
+      				searchResult.push(device);
+      			}
+      			}
+      		}
+
+      	this.searchResult = searchResult;
+      	this.searchResultShow =true;
+      	this.showItem = false;
+			},
 			fetchData(){
 				console.log("刷新data")
 				var self =this
@@ -69,9 +122,6 @@
 							let deviceInfo=data[1];
 							self.$USER.id =deviceInfo[0].u_id;
 
-							if(self.lists)
-								self.lists.splice(0, self.lists.length)
-
 							let lists=data[0];
 							for(let list of lists){
 								list.devices=[];
@@ -82,19 +132,12 @@
 										list.num = list.num+1;
 									}
 								}
-								self.lists.push(list)
 							}
 							for (var i in lists) {
-								Vue.set(self.lists,i,lists[i])
+								self.$set(self.lists,i,lists[i])
 							}
-							console.log(self.lists)
-
 							let t = self.cabinetList();
-							console.log("fetchdata")
-			      	console.log(t)
 							Bus.$emit('cabinetss',t);
-							console.log(Bus)
-							console.log("触发")
             })
             .catch(function (error) {
                 alert(error);
@@ -180,12 +223,57 @@
 }
 </script>
 <style scoped="scoped">
+.sheet-content{
+    display: flex;
+    width: 720px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #e5e5e5;
+    margin-top: 10px;
+    margin-left: 30px;
+    padding-top: 10px;
+    flex-direction: row;
+}
+
+.sheet-content-image{
+		border-width: 1px;
+    border-style: solid;
+    border-color: #e5e5e5;
+    width: 200px;
+    height:200px; 
+}
+.sheet-content-middle{
+    text-align: center;
+    margin-left: 5px;
+    font-size: 40px;
+    color: #666666;
+}
+.sheet-content-list{
+	border-width: 1px;
+  border-style: solid;
+  border-color: #e5e5e5;
+	width: 500px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+.image{
+    width: 190px; 
+    height:190px; 
+    padding: 5px;
+}
+
 .bwrap{
+	margin-top: 30px;
   display: flex;
   justify-content: center;
 }
+.inputp{
+		height: 80px;
+		margin: 20px auto auto 30px;
+}
 	.input{
-		height: 50px;
+		height: 70px;
 		width: 200px;
 	}
 .preview{
@@ -204,13 +292,6 @@
   padding: 30px 30px 20px 30px;
 }
 
-	.image{
-		width: 710px;
-		height: 250px;
-		position: absolute;
-		top: 32px;
-		left: 14px;
-	}
 	.panel{
 		display: flex;
 		width: 710px;
@@ -245,7 +326,6 @@
 		background-color: #EDEBEB;
   }
   .addroom{
-		float: left;
   	color:  #666666;
 		font-size: 40px;
     height: 50px;
@@ -258,9 +338,5 @@
 		border-color: rgba(162,217,192,0.2);
 		border-radius: 25px;
 		background-color: #D2E9FF;
-  }
-  .out{
-		display: flex;
-		flex-direction: column;
   }
 </style>

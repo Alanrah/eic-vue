@@ -83,7 +83,6 @@
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             //withCredentials: true,
           }
-      
 
         let para ={"fileString":pic,"filename":filename}
 

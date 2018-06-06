@@ -15,7 +15,8 @@
                 <div class="form-group">
                     <input type="email" class="form-control" placeholder="邮箱" required="" v-model="userInfo.email">
                 </div>
-                <button type="submit" class="btn btn-primary block full-width m-b" @click="submitForm">注册</button>
+                <button type="submit" class="btn" @click="submitForm">注册</button>
+                <button type="submit" class="btn" @click="back">返回</button>
             </div>
     </div>
   </div>
@@ -36,6 +37,11 @@ export default {
   }
 },
 methods: {
+    back(){
+      this.userInfo.userName='';
+      this.userInfo.password='';
+      this.$router.push('login')
+    },
     submitForm() {
       var self=this;
         var name=self.userInfo.userName;
@@ -88,7 +94,6 @@ methods: {
                       self.userInfo.password='';
                       return
           })
-
     },
 },
 
@@ -113,9 +118,8 @@ methods: {
   }
   .signinpanel {
     width: 500px;
-    margin: 10% auto 0 auto;
+    margin: 230px auto 0 auto;
 }
-
 
 .signinpanel .form-control {
     display: block;
@@ -124,20 +128,11 @@ methods: {
     height: 60px;
 }
 
-.signinpanel .uname {
-    background: #fff ;color:#333;
-}
-
-.signinpanel .pword {
-    background: #fff ;color:#333;
-}
-
 .signinpanel .btn {
     margin-top: 15px;
 }
 
 .col-sm-12 {
-		top: 350px;
     background: rgba(255, 255, 255, 0.2);
     border: 1px solid rgba(255,255,255,.3);
     -moz-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);

@@ -81,8 +81,14 @@
     data:function(){
       return{
         header:"",
-        selectpath:''
+        selectpath:'',
       }
+    },
+    mouted(){
+      Bus.$on("changeindex",(e)=>{
+        this._data.selectpath='index';
+        this._data.header = "今日机房";
+      });
     },
     methods:{
       jump:function(e){

@@ -69,17 +69,25 @@ export default {
       type:Object
       }
   },
+  watch: {  
+    item: {  
+　　　　handler(newValue, oldValue) {  
+            this.data_item = newValue//数据视图舒心成功
+　　　　　　},  
+　　　　deep: true  
+　　　　}  
+    } ,
   data(){
   return{
       showSheets:false,
-      data_item:{},
+      data_item:this.item,
       editicon:"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1525925336206&di=0639d0503540384d2ca6ca92d1a90e3b&imgtype=0&src=http%3A%2F%2Fpic.qiantucdn.com%2F58pic%2F14%2F99%2F24%2F86m58PICvDW_1024.jpg",
       delicon:"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=225219922,1963963014&fm=27&gp=0.jpg",
       isPreview: false,
       previewroom:false,
       device:{},
       editDeviceShow:false,
-  }
+    }
   },
   methods:{
 
@@ -129,7 +137,6 @@ export default {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           }
         let para =vm.device;
-        console.log(para)
         vm.$axios.post('http://'+vm.$IP+'/operate/editDevice', qs.stringify(para), config)
             .then(response => {
               if(response.status == 200){
@@ -158,7 +165,6 @@ export default {
         vm.device = {};
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            //withCredentials: true,
           }
         let para ={"user":vm.$USER.user,"device_id":device.d_id}
         vm.$axios.post('http://'+vm.$IP+'/operate/delete', qs.stringify(para), config)
@@ -168,7 +174,6 @@ export default {
                   plus.nativeUI.toast("删除成功");
                 else
                   alert("删除成功")
-
               Bus.$emit('fresh')
               }
 
@@ -183,7 +188,7 @@ export default {
 
     },
       created(){
-        this.data_item = this.item;
+        //this.data_item = this.item;
       },
 }
 </script>
@@ -191,11 +196,12 @@ export default {
 
 <style scoped="scoped">
 .input{
-    height: 60px;
+    height: 70px;
     width: 100%;
+    margin-top: 10px;
   }
   .inputt{
-    height: 50px;
+    height: 70px;
     width: 300px;
   }
 .sheet-list{
@@ -204,13 +210,14 @@ export default {
   color: #666666;
 }
 .sheet-header{
-    height: 60px;
+    height: 80px;
     width: 748px;
     background-color: #D2E9FF;
     bottom: 2px;
     border-width: 1px;
     border-style: solid;
     border-color: #e5e5e5;
+    padding-top: 10px;
 }
 
 .sheet-header-span{
@@ -222,11 +229,13 @@ export default {
 .sheet-content{
     display: flex;
     width: 720px;
+    height: 70px;
     border-width: 1px;
     border-style: solid;
     border-color: #e5e5e5;
-    margin-top: 4px;
+    margin-top: 5px;
     margin-left: 30px;
+    padding-top: 10px;
     flex-direction: row;
 }
 
@@ -288,7 +297,7 @@ export default {
   background-image:url('http://10.108.104.228:5000/static/devicePic/assets/detail.png');
   background-size:100% 100%;
   float:right;
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
 }
 </style>
