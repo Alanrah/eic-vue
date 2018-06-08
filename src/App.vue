@@ -53,7 +53,7 @@
     background-color: #D2E9FF;
   }
   .template{
-    height: 1100px;
+    height: 1186px;
     top: 0px;
     left: 0px;
     right: 0px;

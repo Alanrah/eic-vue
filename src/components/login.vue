@@ -9,7 +9,7 @@
                 <div class="form-group">
                     <input type="password" class="form-control" placeholder="密码" required="" v-model="userInfo.password">
                 </div>
-                <!--<label><input type="checkbox" v-model="checked" >一周内自动登录</label><br/>-->
+                <label><input type="checkbox" v-model="checked" >一周内自动登录</label><br/>
                 <button type="submit" class="btn" @click="submitForm">登 录</button>
                 <p>测试账号：Catherine 密码：123456</p>
 

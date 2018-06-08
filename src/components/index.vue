@@ -1,27 +1,27 @@
 <template>
-	<div class="out">
+	<div>
 
 		<header>
 			<input type="text" placeholder="search device" class="inputSearch" v-model="keyword" v-on:input="search"/>
 		</header>
 
-		<div class="panel" v-show="showItem">
+			<div class="panel" v-show="showItem">
 				<Item  v-for="(item,index) in lists" :item="item" :key="index"></Item>
 		</div>
 		<div v-show="showItem" class="addroom" @click="roomInsert">
 			添加新机房
 		</div>
 		<div class="preview" v-show="previewroom">
-        <p class="inputp">名称：<input class="input" v-model="room.name"></p>
-        <p class="inputp">所有者：<input class="input" v-model="room.owner"></p>
-        <p class="inputp">地点：<input class="input" v-model="room.pos"></p>
+        <p class="inputp">名称：<input class="input" placeholder="必填" v-model="room.name"></p>
+        <p class="inputp">所有者：<input class="input" placeholder="必填" v-model="room.owner"></p>
+        <p class="inputp">地点：<input class="input" placeholder="必填" v-model="room.pos"></p>
         <p class="inputp">长度：<input class="input" v-model="room.length"></p>
         <p class="inputp">宽度：<input class="input"  v-model="room.width"></p>
         <p class="inputp">高度：<input class="input"  v-model="room.height"></p>
         <!--<p>图片：<input class="input" type="file"></p>-->
         <div class="bwrap">
-         <button style="height:60px;"  @click="confirmAdd">确认</button>
-         <button style="height:60px;"  @click="quitAdd">退出</button></div>
+         <button style="height:40px;margin-right:30px;"  @click="confirmAdd">确认</button>
+         <button style="height:40px;"  @click="quitAdd">退出</button></div>
       </div>
 			
 			<div class="panel" v-show="searchResultShow">
@@ -42,7 +42,6 @@
 	          </div>
 	      </div>
 		</div>
-
 	</div>
 </template>
 <script>
@@ -120,8 +119,7 @@
             .then(response => {
               let data = response.data;
 							let deviceInfo=data[1];
-							self.$USER.id =deviceInfo[0].u_id;
-
+							self.$USER.id = data[2][0];
 							let lists=data[0];
 							for(let list of lists){
 								list.devices=[];
@@ -302,7 +300,6 @@
 		align-items: center;
 		border-width: 2px;
 		border-style: solid;
-		border-color: rgb(162,217,192);
 		border-color: rgba(162,217,192,0.2);
 
 	}
@@ -320,7 +317,6 @@
     margin-bottom: 5px;
     border-width: 2px;
 		border-style: solid;
-		border-color: rgb(162,217,192);
 		border-color: rgba(162,217,192,0.2);
 		border-radius: 25px;
 		background-color: #EDEBEB;
@@ -329,14 +325,16 @@
   	color:  #666666;
 		font-size: 40px;
     height: 50px;
-    width: 400px;
+    width: 250px;
     text-align: center;
-    margin: auto;
+    margin-top: 10px;
+    margin-left: 250px;
 		position: relative;
     border-width: 2px;
 		border-style: solid;
 		border-color: rgba(162,217,192,0.2);
 		border-radius: 25px;
 		background-color: #D2E9FF;
+		margin-bottom: 80px;
   }
 </style>

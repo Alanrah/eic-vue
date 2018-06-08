@@ -1,5 +1,5 @@
 <template>
-	<div style="margin-top: 10px;color:#666666;margin-left:30px;">
+	<div class="rapp">
 		<div class="insert" v-show="showInsert">
 			<p>识别结果如下：</p>
 
@@ -24,7 +24,7 @@
 			    <option value=-1>是机柜</option>
 			  </select>	
 			<br>
-			<button style="height:30px"  @click="submitInsert">确认添加设备到机房数据库</button>
+			<button style="height:30px;margin-bottom: 80px;"  @click="submitInsert">确认添加设备到机房数据库</button>
 		</div>
 		</div>
 	</div>
@@ -97,11 +97,6 @@
   methods:{
   	submitInsert(){
   		var self =this;
-  		if(self._data.positionNum==-1 && self.selectCabinet !=='')
-  			alert("缺少设备位置信息")
-  		if(self._data.deviceName =='' || self._data.deviceName =='识别出错')
-  			alert("缺少设备类型信息")
-
   		let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           }
@@ -113,6 +108,11 @@
        if(self.selectCabinet ==0){//不在机柜里
        	 d_u=-1;
        }
+
+       if(self._data.positionNum==-1 && self.selectCabinet !=='')
+  			alert("缺少设备位置信息")
+  		if((self._data.deviceName =='' || self._data.deviceName =='识别出错')&&self.selectCabinet > 0)
+  			alert("缺少设备类型信息")
        	
 
       let para ={"r_id":self.selectRoom.toString() ,"c_id":self.selectCabinet,"pos_pic":d_u,"d_name":self.deviceName,"d_u":self.positionNum,"d_pic":self.deviceFile}
@@ -143,6 +143,11 @@
 	}
 </script>
 <style>
+.rapp{
+	margin-top: 10px;
+	color:#666666;
+	margin-left:30px;
+}
 	.insert{
 		display: flex;
 		flex-direction: column;

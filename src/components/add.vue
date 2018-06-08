@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="rap">
 		<device></device>
 		<position></position>
 		<inserttodb></inserttodb>
@@ -26,3 +26,5 @@
 		}
 	}
 </script>
+<style scoped="scoped">
+</style>

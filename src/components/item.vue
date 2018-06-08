@@ -1,7 +1,7 @@
 <template>
   <div class="sheet-list">
       <div class="sheet-header" >
-          <i class="icon iconfont icon-enter" ref="toggleicon"></i>
+          <!--<i class="icon iconfont icon-enter" ref="toggleicon"></i>-->
           <span class="sheet-header-span" >
             <span @click="toggleSheet">机房: {{data_item.r_name }} ,设备数：{{data_item.num}}</span>
             <span class="detail" @click="previewRoom"></span> 
@@ -19,7 +19,7 @@
 
       <div v-if="showSheets" class="sheet-content" v-for="i in data_item.devices">
           <div class="sheet-content-image">
-              <img class="image" :src="i.d_pic">
+              <img class="image" :src="i.d_pic" alt="设备图片">
           </div>
           <div class="sheet-content-middle" @click="previewDevice(i)">
               {{i.d_name}}
@@ -53,7 +53,7 @@
             <p>状态：<input class="inputt" v-model="device.d_status"></p>
             <p>生产商：<input class="inputt" v-model="device.d_producer"></p>
             <p>序列号：<input class="inputt" v-model="device.d_seq"></p>
-            <div class="bwrap"> <button @click="confirmEdit">确认修改</button>
+            <div class="bwrap"> <button style="margin-right:30px;" @click="confirmEdit">确认修改</button>
               <button @click="quitEdit">退出修改</button></div>
       </div>
   </div>
@@ -94,7 +94,7 @@ export default {
 //向右的小图标动画
       toggleSheet:function(index){
           event.preventDefault();
-          this.$refs.toggleicon.style.transform = !this.showSheets ? 'rotate(90deg)' : 'rotate(0)'
+          //this.$refs.toggleicon.style.transform = !this.showSheets ? 'rotate(90deg)' : 'rotate(0)'
           this.showSheets = !this.showSheets
       },
       previewRoom:function(e){
@@ -210,21 +210,22 @@ export default {
   color: #666666;
 }
 .sheet-header{
-    height: 80px;
-    width: 748px;
+    height: 70px;
+    width: 740px;
     background-color: #D2E9FF;
     bottom: 2px;
     border-width: 1px;
     border-style: solid;
     border-color: #e5e5e5;
     padding-top: 10px;
+    margin: 0 2px 0 2px;
 }
 
 .sheet-header-span{
-    left: 15px;
+    padding-left: 10px;
     font-size: 40px;
     width: 720px;
-    position:absolute;
+    position:relative;
 }
 .sheet-content{
     display: flex;
@@ -297,7 +298,8 @@ export default {
   background-image:url('http://10.108.104.228:5000/static/devicePic/assets/detail.png');
   background-size:100% 100%;
   float:right;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
+  margin: 10px;
 }
 </style>
