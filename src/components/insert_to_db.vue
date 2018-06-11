@@ -7,6 +7,10 @@
 				<p>该设备名称：<input class="input" v-model="deviceName"></p>
 			</div>
 
+			<div v-show="showDeviceName" class="line">
+				<p>该设备类型：<input class="input" v-model="deviceClass"></p>
+			</div>
+
 			<div v-show="showPosition" class="line">
 				<p>该设备位置：<input class="input" v-model="positionNum">U</p>	
 			</div> 
@@ -36,6 +40,7 @@
 		data(){
 			return{
 				deviceName:null,//d_name
+				deviceClass:null,//d_class
 				deviceFile:null,//d_pic
 				positionNum:-1,//d_u
 				positionFile:null,//pos_pic
@@ -65,7 +70,7 @@
 				return false;
 			},
 			showDeviceName(){
-				if(this._data.deviceName!=null)
+				if(this._data.deviceClass!=null)
 	    		return true;
 				return false;
 			}
@@ -84,6 +89,7 @@
 	    	console.log(this.cabinets)
 	    });
 	    Bus.$on('device',(e)=>{
+	    	this._data.deviceClass=e.deviceName;
 	    	this._data.deviceName=e.deviceName;
 	    	this._data.deviceFile=e.file;
 	    });
@@ -111,11 +117,11 @@
 
        if(self._data.positionNum==-1 && self.selectCabinet !=='')
   			alert("缺少设备位置信息")
-  		if((self._data.deviceName =='' || self._data.deviceName =='识别出错')&&self.selectCabinet > 0)
+  		if((self._data.deviceClass =='' || self._data.deviceClass =='识别出错')&&self.selectCabinet > 0)
   			alert("缺少设备类型信息")
        	
 
-      let para ={"r_id":self.selectRoom.toString() ,"c_id":self.selectCabinet,"pos_pic":d_u,"d_name":self.deviceName,"d_u":self.positionNum,"d_pic":self.deviceFile}
+      let para ={"r_id":self.selectRoom.toString() ,"c_id":self.selectCabinet,"pos_pic":d_u,"d_class":self.deviceClass,"d_name":self.deviceName,"d_u":self.positionNum,"d_pic":self.deviceFile}
 
 
       self.$axios.post('http://'+self.$IP+'/operate/insertDevice', qs.stringify(para), config)

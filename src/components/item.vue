@@ -33,6 +33,7 @@
       </div>
 
       <div class="preview" v-show="isPreview" @click="closePreview"> 
+           <p class="input">类型：{{device.d_class}}</p>
            <p class="input">名称：{{device.d_name}}</p>
             <p class="input">U位：{{device.d_u}}</p>
             <p class="input">长度：{{device.d_length}}</p>
@@ -45,6 +46,7 @@
       </div>
 
       <div class="preview" v-show="editDeviceShow">
+            <p>类型：<input class="inputt" v-model="device.d_class"></p>
             <p>名称：<input class="inputt" v-model="device.d_name"></p>
             <p>U位：<input class="inputt" v-model="device.d_u"></p>
             <p>长度：<input class="inputt" v-model="device.d_length"></p>

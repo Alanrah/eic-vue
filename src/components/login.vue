@@ -27,8 +27,8 @@ export default {
    data () {
   return {
      userInfo :{
-          userName : '',
-          password : '',
+          userName : 'Catherine',
+          password : '123456',
       },
       checked:false,
   }
