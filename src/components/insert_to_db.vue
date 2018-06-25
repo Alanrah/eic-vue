@@ -121,7 +121,7 @@
   			alert("缺少设备类型信息")
        	
 
-      let para ={"r_id":self.selectRoom.toString() ,"c_id":self.selectCabinet,"pos_pic":d_u,"d_class":self.deviceClass,"d_name":self.deviceName,"d_u":self.positionNum,"d_pic":self.deviceFile}
+      let para ={"r_id":self.selectRoom.toString() ,"c_id":self.selectCabinet,"pos_pic":self.positionFile,"d_class":self.deviceClass,"d_name":self.deviceName,"d_u":self.positionNum,"d_pic":self.deviceFile}
 
 
       self.$axios.post('http://'+self.$IP+'/operate/insertDevice', qs.stringify(para), config)

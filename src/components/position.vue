@@ -91,6 +91,9 @@
               self.positionNum = response.data.split(',')[1];
               self.showPosition = true;
               let picUrl = response.data.split(',')[0];
+
+              //console.log(picUrl)
+
               let d = {"file":picUrl,"positionNum":self.positionNum}
               Bus.$emit('position', d);
                if (window.plus)

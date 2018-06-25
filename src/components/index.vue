@@ -109,7 +109,6 @@
       	this.showItem = false;
 			},
 			fetchData(){
-				console.log("刷新data")
 				var self =this
 				let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -118,6 +117,9 @@
 				self.$axios.post('http://'+self.$IP+'/fetch', qs.stringify(para), config)
             .then(response => {
               let data = response.data;
+
+              //console.log(data)
+
 							let deviceInfo=data[1];
 							self.$USER.id = data[2][0];
 							let lists=data[0];
@@ -131,6 +133,8 @@
 									}
 								}
 							}
+
+              //console.log(lists)
 							for (var i in lists) {
 								self.$set(self.lists,i,lists[i])
 							}
@@ -338,3 +342,6 @@
 		margin-bottom: 80px;
   }
 </style>
+
+
+
